@@ -1,10 +1,15 @@
-﻿using System;
+﻿using Compresor.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Compresor.Estructuras
 {
-    class ColaPrioridad
+    public class ColaPrioridad<T> : QueueInterface<T> where T : IComparable
     {
+        public NodoCola<T>[] insert(T value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

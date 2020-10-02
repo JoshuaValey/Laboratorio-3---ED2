@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Compresor.Estructuras
 {
-    class NodoCola
+    public class NodoCola<T> where T : IComparable
     {
+        public T valor { get; set; }
+        public int prioridad { get; set; }
     }
 }
