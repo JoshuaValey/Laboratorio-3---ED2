@@ -9,8 +9,8 @@ namespace Compresor.Estructuras
     public class ColaPrioridad<T> : QueueInterface<T> where T : IComparable
     {
         int contador = 0;
-        NodoCola<T>[] colaPrioridad = new NodoCola<T>[];
-        public NodoCola<T>[] insert(FileStream archivo, T value)
+        List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
+        public List<NodoCola<T>> insert(FileStream archivo, T value)
         {
             using var reader = new BinaryReader(archivo);
             var buffer = new byte[2000000];
@@ -34,7 +34,7 @@ namespace Compresor.Estructuras
                 {
                     foreach(var item in cadena)
                     {
-                        for(int j = 0; j < colaPrioridad.Length; j++)
+                        for(int j = 0; j < colaPrioridad.Count; j++)
                         {
                             if (item.Equals(colaPrioridad[j]))
                             {
@@ -45,14 +45,14 @@ namespace Compresor.Estructuras
                         }
                         if(contador == aux)
                         {
-                            //colaPrioridad[colaPrioridad.Length + 1].valor = (T)item;
-                            colaPrioridad[colaPrioridad.Length + 1].prioridad++;
+                            colaPrioridad[colaPrioridad.Count + 1].valor = item.ToString();
+                            colaPrioridad[colaPrioridad.Count + 1].prioridad++;
                         }
                     }
                 }
                 else //aun no existe nodo para la cola 
                 {
-                    //colaPrioridad[0].valor = cadena[0];
+                    colaPrioridad[0].valor = cadena[0].ToString();
                     colaPrioridad[0].prioridad++;
                 }
             }

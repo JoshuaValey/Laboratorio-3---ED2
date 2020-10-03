@@ -8,6 +8,6 @@ namespace Compresor.Interfaces
 {
     interface QueueInterface<T> where T : IComparable
     {
-        public NodoCola<T>[] insert(FileStream archivo, T value);
+        public List<NodoCola<T>> insert(FileStream archivo, T value);
     }
 }

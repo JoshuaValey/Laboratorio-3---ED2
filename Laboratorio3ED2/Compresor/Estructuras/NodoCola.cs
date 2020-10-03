@@ -6,7 +6,7 @@ namespace Compresor.Estructuras
 {
     public class NodoCola<T> where T : IComparable
     {
-        public T valor { get; set; }
+        public string valor { get; set; }
         public int prioridad { get; set; }
     }
 }
