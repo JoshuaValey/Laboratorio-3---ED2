@@ -20,6 +20,7 @@ namespace Compresor.Huffman
                 auxDer = cola.Dequeue();
                 auxIzqu = cola.Dequeue();
 
+                //Esta validación o validar si el elemento de la cola auxDer es auxDer.FrePrio = 1
                 if (cola.Dequeue() == null)
                 {
                     Raiz = auxDer;
