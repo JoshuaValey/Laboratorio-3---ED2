@@ -23,6 +23,7 @@ namespace Compresor.Huffman
                 if (cola.Dequeue() == null)
                 {
                     Raiz = auxDer;
+                    Raiz.FrecPrio = 1;
 
                 }
                 else
@@ -39,6 +40,7 @@ namespace Compresor.Huffman
             catch (System.NullReferenceException)
             {
                 Raiz = auxDer;
+                Raiz.FrecPrio = 1;
             }
 
         }
