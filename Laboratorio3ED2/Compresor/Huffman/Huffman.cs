@@ -6,6 +6,15 @@ namespace Compresor.Huffman
     public class Huffman<T> where T : System.IComparable
     {
         public NodoHuff<T> Raiz { get; set; }
+        public Dictionary<byte, string> codigosPrefijo = new Dictionary<byte, string>();
+
+        private void GenerarPrefijos()
+        {
+            //Recorrido preorder para generar los prefijos 
+            //Hacer el reccorrido y cuando se encuentre unnodo sin hijos
+            //agregar el value de ese nodo como llave del diccionario y el
+            //string prefijo como valor. 
+        }
 
         private void CrearArbol(Queue<NodoHuff<T>> cola)
         {
@@ -21,10 +30,11 @@ namespace Compresor.Huffman
                 auxIzqu = cola.Dequeue();
 
                 //Esta validación o validar si el elemento de la cola auxDer es auxDer.FrePrio = 1
-                if (cola.Dequeue() == null)
+                if (auxIzqu == null)
                 {
                     Raiz = auxDer;
                     Raiz.FrecPrio = 1;
+                    GenerarPrefijos();
 
                 }
                 else
@@ -42,6 +52,7 @@ namespace Compresor.Huffman
             {
                 Raiz = auxDer;
                 Raiz.FrecPrio = 1;
+                GenerarPrefijos();
             }
 
         }
