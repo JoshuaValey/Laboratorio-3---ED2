@@ -11,8 +11,6 @@ namespace PruebaCompresor
         {
             Console.WriteLine("Hello World!");
             int flag1= 0;
-            
-
             int close=9;
         }
     }
