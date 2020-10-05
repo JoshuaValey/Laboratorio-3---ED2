@@ -64,7 +64,7 @@ namespace Compresor.ColaLabED1
             }
         }
 
-        void Inserting(int p, T data)
+        void Inserting(decimal p, T data)
         {
             if (size == 1)
             {
@@ -98,7 +98,7 @@ namespace Compresor.ColaLabED1
             }
         }
 
-        public void Insert(int value, T data)
+        public void Insert(decimal value, T data)
         {
             Inserting(value, data);
         }

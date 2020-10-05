@@ -1,3 +1,5 @@
+using System;
+
 namespace Compresor.Huffman
 {
     public class NodoHuff<T> where T : System.IComparable
