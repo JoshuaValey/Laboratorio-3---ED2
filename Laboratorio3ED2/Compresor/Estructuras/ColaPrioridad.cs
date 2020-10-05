@@ -1,6 +1,8 @@
-﻿using Compresor.Interfaces;
+﻿using Compresor.ColaLabED1;
+using Compresor.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 
@@ -10,7 +12,8 @@ namespace Compresor.Estructuras
     {
         int contador = 0;
         List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
-        public List<NodoCola<T>> insert(FileStream archivo, T value)
+        ColaED1<byte> priorityQueue = new ColaED1<byte>();
+        public ColaED1<byte> insert(FileStream archivo)
         {
             using var reader = new BinaryReader(archivo);
             var buffer = new byte[2000000];
@@ -21,7 +24,12 @@ namespace Compresor.Estructuras
             }
             reader.Close();
             archivo.Close();
-            return colaPrioridad;
+
+            for(int i = 0; i < colaPrioridad.Count; i++)
+            {
+                priorityQueue.Insert(colaPrioridad[i].prioridad / contador, colaPrioridad[i].valor);
+            }
+            return priorityQueue;
         }
         public void evaluarCadena(byte[] cadena)
         {
@@ -45,15 +53,17 @@ namespace Compresor.Estructuras
                         }
                         if(contador == aux)
                         {
-                            colaPrioridad[colaPrioridad.Count + 1].valor = item.ToString();
+                            colaPrioridad[colaPrioridad.Count + 1].valor = item;
                             colaPrioridad[colaPrioridad.Count + 1].prioridad++;
+                            contador++;
                         }
                     }
                 }
                 else //aun no existe nodo para la cola 
                 {
-                    colaPrioridad[0].valor = cadena[0].ToString();
+                    colaPrioridad[0].valor = cadena[0];
                     colaPrioridad[0].prioridad++;
+                    contador++;
                 }
             }
         }
