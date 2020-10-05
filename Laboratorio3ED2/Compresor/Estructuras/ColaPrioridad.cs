@@ -1,4 +1,5 @@
 ﻿using Compresor.ColaLabED1;
+using Compresor.Huffman;
 using Compresor.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,9 @@ namespace Compresor.Estructuras
     {
         int contador = 0;
         List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
-        ColaED1<byte> priorityQueue = new ColaED1<byte>();
-        public ColaED1<byte> insert(FileStream archivo)
+        NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
+        ColaED1<NodoHuff<byte>> priorityQueue = new ColaED1<NodoHuff<byte>>();
+        public ColaED1<NodoHuff<byte>> insert(FileStream archivo)
         {
             using var reader = new BinaryReader(archivo);
             var buffer = new byte[2000000];
@@ -27,7 +29,9 @@ namespace Compresor.Estructuras
 
             for(int i = 0; i < colaPrioridad.Count; i++)
             {
-                priorityQueue.Insert(colaPrioridad[i].prioridad / contador, colaPrioridad[i].valor);
+                nodoHuffman.Value = colaPrioridad[i].valor;
+                nodoHuffman.FrecPrio = colaPrioridad[i].prioridad / contador;
+                priorityQueue.Insert(nodoHuffman.FrecPrio, nodoHuffman);
             }
             return priorityQueue;
         }
