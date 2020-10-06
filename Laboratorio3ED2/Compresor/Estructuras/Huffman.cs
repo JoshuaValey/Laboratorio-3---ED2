@@ -3,7 +3,7 @@ using Compresor.Huffman;
 
 namespace Compresor.Huffman
 {
-    public class Huffman<T> where T : System.IComparable
+    public class Huffman
     {
         public NodoHuff<byte> Raiz { get; set; }
         public Dictionary<byte, string> codigosPrefijo = new Dictionary<byte, string>();
