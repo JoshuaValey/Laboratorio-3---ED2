@@ -71,9 +71,14 @@ namespace Compresor.Huffman
             }
 
         }
-        public string BynaryEncode()
+        public string BynaryEncode(byte[] cadena)
         {
-            return "";
+            string resultado = "";
+            foreach (var item in cadena)
+            {
+                resultado += codigosPrefijo[item];
+            }
+            return resultado;
         }
 
     }
