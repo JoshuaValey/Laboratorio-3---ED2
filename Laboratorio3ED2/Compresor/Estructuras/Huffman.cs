@@ -29,15 +29,11 @@ namespace Compresor.Huffman
                 SubArbolPrefijos(nodoActual.Derecho, $"{codigo}1");
             }
         }
-
         private void CrearArbol(Queue<NodoHuff<byte>> cola)
         {
-
             NodoHuff<byte> auxIzqu = new NodoHuff<byte>();
             NodoHuff<byte> auxDer = new NodoHuff<byte>();
             NodoHuff<byte> auxPadre = new NodoHuff<byte>();
-
-
             try
             {
                 auxDer = cola.Dequeue();
@@ -49,7 +45,6 @@ namespace Compresor.Huffman
                     Raiz = auxDer;
                     Raiz.FrecPrio = 1;
                     GenerarPrefijos();
-
                 }
                 else
                 {
@@ -71,6 +66,14 @@ namespace Compresor.Huffman
             }
 
         }
+
+        /// <summary>
+        /// Este método recive un arreglo de bytes y por medio del algorítmo de Huffman
+        /// comprime estos bytes a su correlativo en un prefijo de ceros y unos más peuqueño 
+        /// que el valor original. 
+        /// </summary>
+        /// <param name="cadena">Arreglo de bytes, con el contenido del archivo, a ser comprimido</param> 
+        /// <returns> Retorna una cadena con el mensaje comprimido en ceros y unos </returns>
         public string BynaryEncode(byte[] cadena)
         {
             string resultado = "";
@@ -78,6 +81,14 @@ namespace Compresor.Huffman
             {
                 resultado += codigosPrefijo[item];
             }
+
+            int byteFaltante = resultado.Length % 8;
+            if (!(byteFaltante == 0))
+            {
+                int caracteres = 8 - byteFaltante;
+                for (int i = caracteres; i > 0; i--) resultado += "0";
+            }
+
             return resultado;
         }
 
