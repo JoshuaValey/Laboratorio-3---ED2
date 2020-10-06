@@ -74,8 +74,9 @@ namespace Compresor.Huffman
         /// </summary>
         /// <param name="cadena">Arreglo de bytes, con el contenido del archivo, a ser comprimido</param> 
         /// <returns> Retorna una cadena con el mensaje comprimido en ceros y unos </returns>
-        public string BynaryEncode(byte[] cadena)
+        public string BynaryEncode(byte[] cadena, Queue<NodoHuff<byte>> cola)
         {
+            CrearArbol(cola);
             string resultado = "";
             foreach (var item in cadena)
             {
