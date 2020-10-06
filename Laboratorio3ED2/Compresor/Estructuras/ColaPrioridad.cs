@@ -15,7 +15,7 @@ namespace Compresor.Estructuras
         List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
         NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
         ColaED1<NodoHuff<byte>> priorityQueue = new ColaED1<NodoHuff<byte>>();
-        List<byte> arregloBytes = new List<byte>();
+        public List<byte> arregloBytes = new List<byte>();
         public ColaED1<NodoHuff<byte>> insert(FileStream archivo)
         {
             using var reader = new BinaryReader(archivo);
@@ -24,6 +24,7 @@ namespace Compresor.Estructuras
             {
                 buffer = reader.ReadBytes(2000000);
                 evaluarCadena(buffer);
+                devolverBytes(buffer);
             }
             reader.Close();
             archivo.Close();
@@ -73,17 +74,11 @@ namespace Compresor.Estructuras
             }
         }
 
-        public List<byte> devolverBytes(FileStream archivo)
+        public List<byte> devolverBytes(byte[] cadena)
         {
-            using var reader = new BinaryReader(archivo);
-            var buffer = new byte[2000000];
-            while (archivo.Position < archivo.Length)
+            foreach(var item in cadena)
             {
-                buffer = reader.ReadBytes(2000000);
-                foreach(var item in buffer)
-                {
-                    arregloBytes.Add(item);
-                }
+                arregloBytes.Add(item);
             }
             return arregloBytes;
         }
