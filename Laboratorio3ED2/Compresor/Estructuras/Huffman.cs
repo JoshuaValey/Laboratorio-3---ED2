@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Compresor.ColaLabED1;
 using Compresor.Huffman;
 
 namespace Compresor.Huffman
@@ -33,30 +34,30 @@ namespace Compresor.Huffman
                 SubArbolPrefijos(nodoActual.Derecho, $"{codigo}1");
             }
         }
-        private void CrearArbol(Queue<NodoHuff<byte>> cola)
+        private void CrearArbol(ColaED1<NodoHuff<byte>> cola)
         {
             NodoHuff<byte> auxIzqu = new NodoHuff<byte>();
             NodoHuff<byte> auxDer = new NodoHuff<byte>();
             NodoHuff<byte> auxPadre = new NodoHuff<byte>();
             try
             {
-                auxDer = cola.Dequeue();
-                auxIzqu = cola.Dequeue();
+                auxDer = cola.Delete();
+                auxIzqu = cola.Delete();
 
                 //Esta validación o validar si el elemento de la cola auxDer es auxDer.FrePrio = 1
                 if (auxIzqu == null)
                 {
                     Raiz = auxDer;
-                    Raiz.FrecPrio = 1;
+                    Raiz.ProbPrio = 1;
                     GenerarPrefijos();
                 }
                 else
                 {
-                    auxPadre.FrecPrio = auxDer.FrecPrio + auxIzqu.FrecPrio;
+                    auxPadre.ProbPrio = auxDer.ProbPrio + auxIzqu.ProbPrio;
                     auxPadre.Derecho = auxDer;
                     auxPadre.Inzquierdo = auxIzqu;
 
-                    cola.Enqueue(auxPadre);
+                    cola.Insert(auxPadre.ProbPrio, auxPadre);
 
                     CrearArbol(cola);
                 }
@@ -64,7 +65,7 @@ namespace Compresor.Huffman
             catch (System.NullReferenceException ex)
             {
                 Raiz = auxDer;
-                Raiz.FrecPrio = 1;
+                Raiz.ProbPrio = 1;
                 GenerarPrefijos();
 
             }
@@ -78,7 +79,7 @@ namespace Compresor.Huffman
         /// </summary>
         /// <param name="cadena">Arreglo de bytes, con el contenido del archivo, a ser comprimido</param> 
         /// <returns> Retorna una cadena con el mensaje comprimido en ceros y unos </returns>
-        public string BynaryEncode(byte[] cadena, Queue<NodoHuff<byte>> cola)
+        public string BynaryEncode(byte[] cadena, ColaED1<NodoHuff<byte>> cola)
         {
             CrearArbol(cola);
             string resultado = "";
