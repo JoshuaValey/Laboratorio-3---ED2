@@ -1,18 +1,30 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using Compresor.ColaLabED1;
+using Compresor.Estructuras;
 using Compresor.Huffman;
+using Compresor.Interfaces;
 
 namespace Compresor.Huffman
 {
-    public class Huffman
+    public class Huffman<T> : HuffmanInterface<T> where T : IComparable
     {
         public NodoHuff<byte> Raiz { get; set; }
         public Dictionary<byte, string> codigosPrefijo = new Dictionary<byte, string>();
         public string textoComprimido { get; set; }
+        ColaED1<NodoHuff<byte>> colaPrioridad = new ColaED1<NodoHuff<byte>>();
+        ColaPrioridad<byte> cola = new ColaPrioridad<byte>();
 
+        public string Comprimir(FileStream archivo)
+        {
+            colaPrioridad = cola.insert(archivo);
+            string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
+            devolverASCII(codigoBinario);
+            return textoComprimido;
+        }
         private void GenerarPrefijos()
         {
             //Recorrido preorder para generar los prefijos 
@@ -79,7 +91,7 @@ namespace Compresor.Huffman
         /// </summary>
         /// <param name="cadena">Arreglo de bytes, con el contenido del archivo, a ser comprimido</param> 
         /// <returns> Retorna una cadena con el mensaje comprimido en ceros y unos </returns>
-        public string BynaryEncode(byte[] cadena, ColaED1<NodoHuff<byte>> cola)
+        public string BynaryEncode(List<byte> cadena, ColaED1<NodoHuff<byte>> cola)
         {
             CrearArbol(cola);
             string resultado = "";
@@ -126,6 +138,7 @@ namespace Compresor.Huffman
             }
             return codigos;
         }
+
         
     }
 

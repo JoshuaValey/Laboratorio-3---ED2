@@ -32,8 +32,8 @@ namespace Compresor.Estructuras
             for(int i = 0; i < colaPrioridad.Count; i++)
             {
                 nodoHuffman.Value = colaPrioridad[i].valor;
-                nodoHuffman.FrecPrio = colaPrioridad[i].prioridad / contador;
-                priorityQueue.Insert(nodoHuffman.FrecPrio, nodoHuffman);
+                nodoHuffman.ProbPrio = colaPrioridad[i].prioridad / contador;
+                priorityQueue.Insert(nodoHuffman.ProbPrio, nodoHuffman);
             }
             return priorityQueue;
         }
