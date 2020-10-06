@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Compresor.Huffman;
 
 namespace Compresor.Huffman
@@ -7,6 +10,7 @@ namespace Compresor.Huffman
     {
         public NodoHuff<byte> Raiz { get; set; }
         public Dictionary<byte, string> codigosPrefijo = new Dictionary<byte, string>();
+        public string textoComprimido { get; set; }
 
         private void GenerarPrefijos()
         {
@@ -93,5 +97,35 @@ namespace Compresor.Huffman
             return resultado;
         }
 
+        public string devolverASCII(string codigoBinario)
+        {
+            System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
+            List<string> codigosOcho = new List<string>();
+            codigosOcho = codigosSplit(8, codigoBinario);
+            byte[] paraASCII = new byte[8];
+            
+            foreach(var item in codigosOcho)
+            {
+                paraASCII = Encoding.ASCII.GetBytes(item);
+                textoComprimido += encoder.GetString(paraASCII);
+            }
+            return textoComprimido;
+        }
+        private List<string> codigosSplit(int splitSize, string codigoBinario)
+        {
+            int stringLength = codigoBinario.Length;
+            List<string> codigos = new List<string>();
+            for (int i = 0; i < stringLength; i += splitSize)
+            {
+                if ((i + splitSize) > stringLength)
+                {
+                    splitSize = stringLength - 1;
+                    codigos.Add(codigoBinario.Substring(i, splitSize));
+                }
+            }
+            return codigos;
+        }
+        
     }
+
 }
