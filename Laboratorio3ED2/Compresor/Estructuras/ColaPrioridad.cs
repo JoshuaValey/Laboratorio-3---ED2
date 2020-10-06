@@ -73,14 +73,12 @@ namespace Compresor.Estructuras
                 }
             }
         }
-
-        public List<byte> devolverBytes(byte[] cadena)
+        public void devolverBytes(byte[] cadena)
         {
             foreach(var item in cadena)
             {
                 arregloBytes.Add(item);
             }
-            return arregloBytes;
         }
     }
 }
