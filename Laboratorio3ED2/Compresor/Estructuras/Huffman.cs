@@ -141,7 +141,13 @@ namespace Compresor.Huffman
             return codigos;
         }
 
-
+        /// <summary>
+        /// Método que resive la cadena de caracteres a descomprimir
+        /// y la convierte a una cadena de ceros y unos.
+        /// 
+        /// </summary>
+        /// <param name="cadenaCaracteres">Arreglo de caracteres a descomprimir</param> 
+        /// <returns>Una cadena de ceros y unos</returns>
         public string StringCompressedToBinaryString(string cadenaCaracteres)
         {
             string binaryString = "";
@@ -171,6 +177,13 @@ namespace Compresor.Huffman
             return binaryString;
         }
 
+        /// <summary>
+        /// Método que resive la cadena de ceros y unos
+        /// y a través del diccionario con los códigos prefigo
+        /// vuelve a armar el mensaje original en bytes
+        /// </summary>
+        /// <param name="binaryString">Cadena de ceros y unos</param> 
+        /// <returns>Listado de bytes del el mensaje original</returns>
         public List<byte> StringBinarioAMensaje(string binaryString)
         {
             List<byte> mensaje = new List<byte>();
