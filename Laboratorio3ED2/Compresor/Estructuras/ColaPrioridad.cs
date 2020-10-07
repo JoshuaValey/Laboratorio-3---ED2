@@ -12,10 +12,11 @@ namespace Compresor.Estructuras
     public class ColaPrioridad<T> : QueueInterface<T> where T : IComparable
     {
         int contador = 0;
-        List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
+        public List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
         NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
         ColaED1<NodoHuff<byte>> priorityQueue = new ColaED1<NodoHuff<byte>>();
         public List<byte> arregloBytes = new List<byte>();
+        public int cantidadBytes = 0;
         public ColaED1<NodoHuff<byte>> insert(FileStream archivo)
         {
             using var reader = new BinaryReader(archivo);
@@ -32,6 +33,7 @@ namespace Compresor.Estructuras
             for(int i = 0; i < colaPrioridad.Count; i++)
             {
                 nodoHuffman.Value = colaPrioridad[i].valor;
+                nodoHuffman.Frecuencia = colaPrioridad[i].prioridad;
                 nodoHuffman.ProbPrio = colaPrioridad[i].prioridad / contador;
                 priorityQueue.Insert(nodoHuffman.ProbPrio, nodoHuffman);
             }
@@ -61,6 +63,7 @@ namespace Compresor.Estructuras
                         {
                             colaPrioridad[colaPrioridad.Count + 1].valor = item;
                             colaPrioridad[colaPrioridad.Count + 1].prioridad++;
+                            cantidadBytes++;
                             contador++;
                         }
                     }

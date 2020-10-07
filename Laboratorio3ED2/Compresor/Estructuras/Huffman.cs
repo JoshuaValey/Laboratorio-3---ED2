@@ -17,13 +17,20 @@ namespace Compresor.Huffman
         public Dictionary<string, byte> cogdigosPrefijoByte = new Dictionary<string, byte>();
         public string textoComprimido { get; set; }
         ColaED1<NodoHuff<byte>> colaPrioridad = new ColaED1<NodoHuff<byte>>();
-        ColaPrioridad<byte> cola = new ColaPrioridad<byte>();
+        static ColaPrioridad<byte> cola = new ColaPrioridad<byte>();
+        List<datosArchivo> listaDatos = new List<datosArchivo>();
+        int cantidadCaracteres = cola.cantidadBytes;
+        int cantidadValores = 0;
+        StreamWriter documento = new StreamWriter(@".\datosCompresion.txt");
+        string lineaArchivo;
 
         public string Comprimir(FileStream archivo)
         {
             colaPrioridad = cola.insert(archivo);
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
+            lineaArchivo = escribirArchivo(datosParaArchivo());
+            documento.Write(lineaArchivo);
             return textoComprimido;
         }
         private void GenerarPrefijos()
@@ -111,7 +118,6 @@ namespace Compresor.Huffman
 
             return resultado;
         }
-
         public string devolverASCII(string codigoBinario)
         {
             System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
@@ -140,6 +146,96 @@ namespace Compresor.Huffman
             }
             return codigos;
         }
+        private List<datosArchivo> datosParaArchivo()
+        {
+            cantidadValores = 1;
+            System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
+            int valor1 = 0;
+            int valor2 = 0;
+            string valorCero;
+            string valorBinario;
+            byte[] paraArchivo = new byte[8];
+            byte[] paraArchivo2 = new byte[8];
+            datosArchivo datos = new datosArchivo();
+
+            //verifica si hay algun caracter que se repita mas se 256 veces, si lo hace, se agrega un numero a la cantidad de valores despues de la letra
+            for (int i = 0; i < cantidadCaracteres; i++)
+            {
+                if (cola.colaPrioridad[i].prioridad > 256)
+                {
+                    cantidadValores = 2;
+                }
+            }
+
+            //metodo para crear lista con datos para archivo
+            for (int i = 0; i < cantidadCaracteres; i++)
+            {
+                //caso de que ningun valor pase las 256 repeticiones
+                if (cantidadValores == 1)
+                {
+                    valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
+                    paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
+                    datos.caracter = cola.colaPrioridad[i].valor.ToString();
+                    datos.valorASCII = encoder.GetString(paraArchivo);
+                    listaDatos.Add(datos);
+                }
+                else //caso de que si pasen las 256 repeticiones 
+                {
+                    if (cola.colaPrioridad[i].prioridad <= 256) //caso de que ese en especifico no pase las 256
+                    {
+                        valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
+                        valorCero = Convert.ToString(0, 2);
+                        paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
+                        paraArchivo2 = Encoding.ASCII.GetBytes(valorCero);
+                        datos.caracter = cola.colaPrioridad[i].valor.ToString();
+                        datos.valorASCII = encoder.GetString(paraArchivo2) + encoder.GetString(paraArchivo);
+                        listaDatos.Add(datos);
+                    }
+                    else //caso de que si pasa las 256
+                    {
+                        if ((cola.colaPrioridad[i].prioridad % 2) == 0) //frecuencia es par
+                        {
+                            valor2 = cola.colaPrioridad[i].prioridad / 2;
+                            valorBinario = Convert.ToString(valor2, 2);
+                            paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
+                            datos.caracter = cola.colaPrioridad[i].valor.ToString();
+                            datos.valorASCII = encoder.GetString(paraArchivo) + encoder.GetString(paraArchivo);
+                            listaDatos.Add(datos);
+                        }
+                        else //frecuencia es impar
+                        {
+                            valor1 = (cola.colaPrioridad[i].prioridad - 1) / 2;
+                            valor2 = valor1 + 1;
+                            valorBinario = Convert.ToString(valor1, 2);
+                            valorCero = Convert.ToString(valor2, 2);
+                            paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
+                            paraArchivo2 = Encoding.ASCII.GetBytes(valorCero);
+                            datos.caracter = cola.colaPrioridad[i].valor.ToString();
+                            datos.valorASCII = encoder.GetString(paraArchivo) + encoder.GetString(paraArchivo2);
+                            listaDatos.Add(datos);
+                        }
+                    }
+                }
+            }
+
+            //retornar listado con string caracter y su frecuencia en ascii
+            return listaDatos;
+        }
+
+
+        private string escribirArchivo(List<datosArchivo> datos)
+        {
+            string linea;
+            linea = cantidadCaracteres + cantidadValores.ToString();
+            foreach (var item in datos)
+            {
+                linea += item.caracter + item.valorASCII;
+            }
+            linea += textoComprimido;
+            return linea;
+        }
+
+
 
 
 
