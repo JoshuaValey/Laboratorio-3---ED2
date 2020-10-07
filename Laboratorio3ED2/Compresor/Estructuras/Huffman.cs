@@ -13,7 +13,8 @@ namespace Compresor.Huffman
     public class Huffman<T> : HuffmanInterface<T> where T : IComparable
     {
         public NodoHuff<byte> Raiz { get; set; }
-        public Dictionary<byte, string> codigosPrefijo = new Dictionary<byte, string>();
+        public Dictionary<byte, string> codigosBytePrefijo = new Dictionary<byte, string>();
+        public Dictionary<string, byte> cogdigosPrefijoByte = new Dictionary<string, byte>();
         public string textoComprimido { get; set; }
         ColaED1<NodoHuff<byte>> colaPrioridad = new ColaED1<NodoHuff<byte>>();
         ColaPrioridad<byte> cola = new ColaPrioridad<byte>();
@@ -38,7 +39,8 @@ namespace Compresor.Huffman
         {
             if (nodoActual.Inzquierdo == null && nodoActual.Derecho == null)
             {
-                codigosPrefijo.Add(nodoActual.Value, codigo);
+                codigosBytePrefijo.Add(nodoActual.Value, codigo);
+                cogdigosPrefijoByte.Add(codigo, nodoActual.Value);
             }
             else
             {
@@ -97,7 +99,7 @@ namespace Compresor.Huffman
             string resultado = "";
             foreach (var item in cadena)
             {
-                resultado += codigosPrefijo[item];
+                resultado += codigosBytePrefijo[item];
             }
 
             int byteFaltante = resultado.Length % 8;
@@ -116,8 +118,8 @@ namespace Compresor.Huffman
             List<string> codigosOcho = new List<string>();
             codigosOcho = codigosSplit(8, codigoBinario);
             byte[] paraASCII = new byte[8];
-            
-            foreach(var item in codigosOcho)
+
+            foreach (var item in codigosOcho)
             {
                 paraASCII = Encoding.ASCII.GetBytes(item);
                 textoComprimido += encoder.GetString(paraASCII);
@@ -139,7 +141,23 @@ namespace Compresor.Huffman
             return codigos;
         }
 
-        
+        public List<byte> StringBinarioAMensaje(string bynaryString)
+        {
+            List<byte> mensaje = new List<byte>();
+            //El arbol debe estar creado en este momento para que el diccionario de prefijos exista. 
+            string prefijo = "";
+            for (int i = 0; i < bynaryString.Length; i++)
+            {
+                prefijo += bynaryString[i];
+                if (cogdigosPrefijoByte.ContainsKey(prefijo))
+                {
+                    mensaje.Add(cogdigosPrefijoByte[prefijo]);
+                    prefijo = "";
+                }
+
+            }
+            return mensaje;
+        }
     }
 
 }
