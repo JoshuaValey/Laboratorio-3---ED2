@@ -141,14 +141,44 @@ namespace Compresor.Huffman
             return codigos;
         }
 
-        public List<byte> StringBinarioAMensaje(string bynaryString)
+
+        public string StringCompressedToBinaryString(string cadenaCaracteres)
+        {
+            string binaryString = "";
+
+            for (int i = 0; i < cadenaCaracteres.Length; i++)
+            {
+                char caracter = Convert.ToChar(cadenaCaracteres[i]);
+                long dato = Convert.ToInt32(caracter);
+                string cadenaBinaria = Convert.ToString(dato, 2);
+
+                int cerosFaltantes;
+                if (!((cerosFaltantes = cadenaBinaria.Length % 8) == 0))
+                {
+                    string nuevaCadena = "";
+                    string ceros = "";
+
+                    for (int j = 0; j < cerosFaltantes; j++) ceros += "0";
+                    nuevaCadena = ceros + cadenaBinaria;
+                    cadenaBinaria = nuevaCadena;
+
+
+                }
+                binaryString += cadenaBinaria;
+
+            }
+
+            return binaryString;
+        }
+
+        public List<byte> StringBinarioAMensaje(string binaryString)
         {
             List<byte> mensaje = new List<byte>();
             //El arbol debe estar creado en este momento para que el diccionario de prefijos exista. 
             string prefijo = "";
-            for (int i = 0; i < bynaryString.Length; i++)
+            for (int i = 0; i < binaryString.Length; i++)
             {
-                prefijo += bynaryString[i];
+                prefijo += binaryString[i];
                 if (cogdigosPrefijoByte.ContainsKey(prefijo))
                 {
                     mensaje.Add(cogdigosPrefijoByte[prefijo]);
@@ -158,6 +188,7 @@ namespace Compresor.Huffman
             }
             return mensaje;
         }
+
     }
 
 }
