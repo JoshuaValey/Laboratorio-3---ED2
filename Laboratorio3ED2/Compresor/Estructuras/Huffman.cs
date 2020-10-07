@@ -21,6 +21,7 @@ namespace Compresor.Huffman
         List<datosArchivo> listaDatos = new List<datosArchivo>();
         int cantidadCaracteres = cola.cantidadBytes;
         int cantidadValores = 0;
+        StreamWriter documento = new StreamWriter(@".\datosCompresion.txt");
         string lineaArchivo;
 
         public string Comprimir(FileStream archivo)
@@ -29,6 +30,7 @@ namespace Compresor.Huffman
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
             lineaArchivo = escribirArchivo(datosParaArchivo());
+            documento.Write(lineaArchivo);
             return textoComprimido;
         }
         private void GenerarPrefijos()
