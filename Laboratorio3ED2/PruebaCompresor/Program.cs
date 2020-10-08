@@ -1,8 +1,7 @@
 ﻿using System;
 using Compresor.Estructuras;
 using System.Collections.Generic;
-
-
+using System.IO;
 
 namespace PruebaCompresor
 {
@@ -10,18 +9,9 @@ namespace PruebaCompresor
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
-            char binario = 'H';
-            long dato = Convert.ToInt64(binario);
-            //byte num = Convert.ToByte(binario);
-            string cadenaBinaria = Convert.ToString(dato, 2);
-
-
-            Console.WriteLine(cadenaBinaria);
-
-            int flag1 = 0;
-            int close = 9;
+            Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
+            FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\Prueba.txt", FileMode.Open);
+            string comprimido = compresor.Comprimir(file);
         }
     }
 }

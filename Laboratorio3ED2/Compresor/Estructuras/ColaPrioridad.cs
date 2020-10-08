@@ -34,7 +34,7 @@ namespace Compresor.Estructuras
             {
                 nodoHuffman.Value = colaPrioridad[i].valor;
                 nodoHuffman.Frecuencia = colaPrioridad[i].prioridad;
-                nodoHuffman.ProbPrio = colaPrioridad[i].prioridad / contador;
+                nodoHuffman.ProbPrio = colaPrioridad[i].prioridad % contador;
                 priorityQueue.Insert(nodoHuffman.ProbPrio, nodoHuffman);
             }
             return priorityQueue;
@@ -42,39 +42,59 @@ namespace Compresor.Estructuras
         public void evaluarCadena(byte[] cadena)
         {
             int aux = contador;
-            NodoCola<T> nodo = new NodoCola<T>();
-            for(int i = 0; i<cadena.Length; i++)
+            int itemNum = 1;
+            int finalCadena = 0;
+
+            while (finalCadena != cadena.Length)
             {
                 //ya existe la cadena de nodos para la cola  
-                if(contador != 0)
+                if (contador != 0)
                 {
-                    foreach(var item in cadena)
+                    foreach (var item in cadena)
                     {
-                        for(int j = 0; j < colaPrioridad.Count; j++)
+                        if (itemNum == 1)
                         {
-                            if (item.Equals(colaPrioridad[j]))
-                            {
-                                colaPrioridad[j].prioridad++;
-                                contador++;
-                                break;
-                            }
+                            itemNum++;
                         }
-                        if(contador == aux)
+                        else
                         {
-                            colaPrioridad[colaPrioridad.Count + 1].valor = item;
-                            colaPrioridad[colaPrioridad.Count + 1].prioridad++;
-                            cantidadBytes++;
-                            contador++;
+                            for (int j = 0; j < colaPrioridad.Count; j++)
+                            {
+                                if (item.Equals(colaPrioridad[j].valor))
+                                {
+                                    colaPrioridad[j].prioridad++;
+                                    contador++;
+                                    finalCadena++;
+                                    break;
+                                }
+                            }
+                            if (contador == aux)
+                            {
+                                NodoCola<T> nodo = new NodoCola<T>();
+                                nodo.valor = item;
+                                nodo.prioridad++;
+                                colaPrioridad.Add(nodo);
+                                cantidadBytes++;
+                                contador++;
+                                finalCadena++;
+                            }
+                            aux = contador;
                         }
                     }
                 }
                 else //aun no existe nodo para la cola 
                 {
-                    colaPrioridad[0].valor = cadena[0];
-                    colaPrioridad[0].prioridad++;
+                    NodoCola<T> nodo = new NodoCola<T>();
+                    nodo.valor = cadena[0];
+                    nodo.prioridad++;
+                    colaPrioridad.Add(nodo);
                     contador++;
+                    cantidadBytes++;
+                    aux = contador;
+                    finalCadena++;
                 }
             }
+            
         }
         public void devolverBytes(byte[] cadena)
         {
