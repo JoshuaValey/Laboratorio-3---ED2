@@ -281,6 +281,7 @@ namespace Compresor.Huffman
         /// <returns>Listado de bytes del el mensaje original</returns>
         public List<byte> StringBinarioAMensaje(string binaryString)
         {
+            //TODO: Recordar evaluar los ultimos bits que pueden escribirse para rellenar....
             List<byte> mensaje = new List<byte>();
             //El arbol debe estar creado en este momento para que el diccionario de prefijos exista. 
             string prefijo = "";
