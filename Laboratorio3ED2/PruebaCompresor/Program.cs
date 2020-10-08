@@ -1,11 +1,15 @@
 ﻿using System;
 using Compresor.Estructuras;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using Compresor.Estructuras;
 using System.IO;
 
 
 
+=======
+using System.IO;
+>>>>>>> ebfcf7cb4bd9cd3d640fb6508d59426066048de7
 
 namespace PruebaCompresor
 {
@@ -13,43 +17,9 @@ namespace PruebaCompresor
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
-            /* char binario = 'H';
-             long dato = Convert.ToInt64(binario);
-             //byte num = Convert.ToByte(binario);
-             string cadenaBinaria = Convert.ToString(dato, 2);
-
-
-             Console.WriteLine(cadenaBinaria);*/
-
-            Compresor.Huffman.Huffman<byte> compressor = new Compresor.Huffman.Huffman<byte>();
-            try
-            {
-                FileStream file = new FileStream(@".\prueba2", FileMode.Create, FileAccess.Write);
-                StreamWriter streamWriter = new StreamWriter(file);
-                streamWriter.WriteLine("ddabdccedchafbadgdcgabgccddbcdgg");
-                streamWriter.Close();
-                file.Close();
-                FileStream file2 = new FileStream(@".\prueba2", FileMode.Open, FileAccess.Read);
-                string comprimido = compressor.Comprimir(file2);
-                file2.Close();
-
-
-                Console.WriteLine(comprimido);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
-
-
-
-            Console.WriteLine("FinPrueba");
-
-            int flag1 = 0;
-            int close = 9;
+            Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
+            FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\Prueba.txt", FileMode.Open);
+            string comprimido = compresor.Comprimir(file);
         }
     }
 }
