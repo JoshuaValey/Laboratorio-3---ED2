@@ -66,10 +66,10 @@ namespace Compresor.ColaLabED1
 
         void Inserting(decimal p, T data)
         {
-            if (size == 1)
+            /*if (size == 1)
             {
                 size = -1;
-            }
+            }*/
 
             Node<T> newNode = new Node<T>();
             newNode.priority = p;
