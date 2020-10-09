@@ -304,6 +304,31 @@ namespace Compresor.Huffman
         }
 
         /// <summary>
+        /// Este metodo rellena con ceros a la izquierda una cadena de ceros y unos
+        /// para convertirla posteriormente a decimal y a ascci luego 
+        /// de separarla en dos bytes 
+        /// </summary>
+        /// <param name="cadenaBinaria">Arreglo de ceros y unos</param> 
+        /// <returns>Una cadena de ceros y unos de 16 pos</returns>
+        private string RellenarCeros2Bytes(string cadenaBinaria){
+            string bynariString = "";
+
+            int cerosFaltantes;
+            if (!((cerosFaltantes = cadenaBinaria.Length % 16) == 0))
+            {
+                string nuevaCadena = "";
+                string ceros = "";
+
+                for (int i=0; i< cerosFaltantes; i++) ceros += "0";
+                nuevaCadena = ceros + cadenaBinaria;
+                cadenaBinaria = nuevaCadena;
+            }
+            bynariString += cadenaBinaria;
+
+            return bynariString;
+        }
+
+        /// <summary>
         /// Método que resive la cadena de ceros y unos
         /// y a través del diccionario con los códigos prefigo
         /// vuelve a armar el mensaje original en bytes
