@@ -34,9 +34,6 @@ namespace Compresor.Estructuras
             {
                 NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
                 nodoHuffman.Value = colaPrioridad[i].valor;
-                //nodoHuffman.Frecuencia = colaPrioridad[i].prioridad;
-                //nodoHuffman.ProbPrio = colaPrioridad[i].prioridad / contador;
-                //priorityQueue.Insert(nodoHuffman.ProbPrio, nodoHuffman);
                 nodoHuffman.Frecuencia = Decimal.Divide(colaPrioridad[i].prioridad, contador);
                 nodoHuffman.ProbPrio = colaPrioridad[i].prioridad;
                 priorityQueue.Insert(nodoHuffman.Frecuencia, nodoHuffman);
