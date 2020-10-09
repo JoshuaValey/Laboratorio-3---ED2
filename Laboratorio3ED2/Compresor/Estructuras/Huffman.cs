@@ -307,14 +307,14 @@ namespace Compresor.Huffman
         /// </summary>
         /// <param name="cadenaBinaria">Cadena de ceros y unos</param> 
         /// <returns>Entero decimal que será convertido a ASCII</returns>
-        private int CadenaBinAInt(string cadenaBinaria)
+         private int CadenaBinAInt(string cadenaBinaria)
         {
             int resultado = 0;
 
             int[] baseDecimal = {128,64,32,16,8,4,2,1};
             
             for (int i = 0; i < 8; i++)
-                if (cadenaBinaria[i].Equals('1')) resultado += baseDecimal[i];
+                if (cadenaBinaria[i] == '1') resultado += baseDecimal[i];
             
             return resultado;
         }
