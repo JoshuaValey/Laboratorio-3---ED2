@@ -303,7 +303,13 @@ namespace Compresor.Huffman
 
 
 
-
+        /// <summary>
+        /// Este método resive una cadena de ceros y unos, ejemplo:
+        /// "10110011" y la convierte en un número entero para posteriormente
+        /// convertir ese entero en un caracter ASCII.
+        /// </summary>
+        /// <param name="cadenaBinaria">Cadena de ceros y unos</param> 
+        /// <returns>Entero decimal que será convertido a ASCII</returns>
         private int CadenaBinAInt(string cadenaBinaria)
         {
             int resultado = 0;
