@@ -329,6 +329,19 @@ namespace Compresor.Huffman
         }
 
         /// <summary>
+        /// Separar un arreglo de ceros y uno de 16 pos
+        /// en dos de 8 para manejar dos bytes
+        /// </summary>
+        /// <param name="_16Bits">Arreglo de ceros y unos</param> 
+        /// <returns>Un arreglo de dos posiciones de cadenas de ceros y unos de de 8 pos</returns>
+        private string[] SepararEn2Bytes(string _16Bits)
+        {
+           string[] resultado = {_16Bits.Substring(0, 8),
+                _16Bits.Substring(8,8)};
+
+                return resultado;
+        }
+        /// <summary>
         /// Método que resive la cadena de ceros y unos
         /// y a través del diccionario con los códigos prefigo
         /// vuelve a armar el mensaje original en bytes
