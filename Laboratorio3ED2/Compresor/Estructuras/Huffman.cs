@@ -21,7 +21,7 @@ namespace Compresor.Huffman
         List<datosArchivo> listaDatos = new List<datosArchivo>();
         int cantidadCaracteres = cola.cantidadBytes;
         int cantidadValores = 0;
-        StreamWriter documento = new StreamWriter(@".\datosCompresion.txt");
+        StreamWriter documento = new StreamWriter(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt");
         string lineaArchivo;
 
         public string Comprimir(FileStream archivo)
@@ -30,7 +30,8 @@ namespace Compresor.Huffman
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
             lineaArchivo = escribirArchivo(datosParaArchivo());
-            documento.Write(lineaArchivo);
+            documento.WriteLine(lineaArchivo);
+            documento.Close();
             return textoComprimido;
         }
         private void GenerarPrefijos()
@@ -176,7 +177,7 @@ namespace Compresor.Huffman
         }
         private List<datosArchivo> datosParaArchivo()
         {
-            cantidadValores = 1;
+            cantidadValores = 2;
             System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
             int valor1 = 0;
             int valor2 = 0;
@@ -184,67 +185,46 @@ namespace Compresor.Huffman
             string valorBinario;
             Queue<byte> paraArchivo = new Queue<byte>();
             Queue<byte> paraArchivo2 = new Queue<byte>();
-            datosArchivo datos = new datosArchivo();
-
-            //verifica si hay algun caracter que se repita mas se 256 veces, si lo hace, se agrega un numero a la cantidad de valores despues de la letra
-            for (int i = 0; i < cola.cantidadBytes; i++)
-            {
-                if (cola.colaPrioridad[i].prioridad > 256)
-                {
-                    cantidadValores = 2;
-                }
-            }
 
             //metodo para crear lista con datos para archivo
             for (int i = 0; i < cola.cantidadBytes; i++)
             {
-                //caso de que ningun valor pase las 256 repeticiones
-                if (cantidadValores == 1)
+                datosArchivo datos = new datosArchivo();
+                if (cola.colaPrioridad[i].prioridad <= 256) //caso de que ese en especifico no pase las 256
                 {
                     valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
-                    paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
-                    datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                    datos.valorASCII = Convert.ToChar(paraArchivo);
+                    valorCero = Convert.ToString(0, 2);
+                    paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
+                    paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorCero))));
+                    datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
+                    datos.valorASCII = Convert.ToChar(paraArchivo2.Dequeue());
+                    datos.valorASCII += Convert.ToChar(paraArchivo.Dequeue());
                     listaDatos.Add(datos);
                 }
-                else //caso de que si pasen las 256 repeticiones 
+                else //caso de que si pasa las 256
                 {
-                    if (cola.colaPrioridad[i].prioridad <= 256) //caso de que ese en especifico no pase las 256
+                    if ((cola.colaPrioridad[i].prioridad % 2) == 0) //frecuencia es par
                     {
-                        valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
-                        valorCero = Convert.ToString(0, 2);
-                        paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
-                        paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(valorCero)));
-                        datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                        datos.valorASCII = Convert.ToChar(valor2);
-                        datos.valorASCII += Convert.ToChar(valor1);
+                        valor2 = cola.colaPrioridad[i].prioridad / 2;
+                        valorBinario = Convert.ToString(valor2, 2);
+                        paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
+                        datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
+                        datos.valorASCII = Convert.ToChar(paraArchivo.Dequeue());
+                        datos.valorASCII += Convert.ToChar(paraArchivo.Dequeue());
                         listaDatos.Add(datos);
                     }
-                    else //caso de que si pasa las 256
+                    else //frecuencia es impar
                     {
-                        if ((cola.colaPrioridad[i].prioridad % 2) == 0) //frecuencia es par
-                        {
-                            valor2 = cola.colaPrioridad[i].prioridad / 2;
-                            valorBinario = Convert.ToString(valor2, 2);
-                            paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
-                            datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                            datos.valorASCII = Convert.ToChar(paraArchivo);
-                            datos.valorASCII += Convert.ToChar(paraArchivo);
-                            listaDatos.Add(datos);
-                        }
-                        else //frecuencia es impar
-                        {
-                            valor1 = (cola.colaPrioridad[i].prioridad - 1) / 2;
-                            valor2 = valor1 + 1;
-                            valorBinario = Convert.ToString(valor1, 2);
-                            valorCero = Convert.ToString(valor2, 2);
-                            paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
-                            paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(valorCero)));
-                            datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                            datos.valorASCII = Convert.ToChar(paraArchivo);
-                            datos.valorASCII += Convert.ToChar(paraArchivo2);
-                            listaDatos.Add(datos);
-                        }
+                        valor1 = (cola.colaPrioridad[i].prioridad - 1) / 2;
+                        valor2 = valor1 + 1;
+                        valorBinario = Convert.ToString(valor1, 2);
+                        valorCero = Convert.ToString(valor2, 2);
+                        paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
+                        paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(valorCero)));
+                        datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
+                        datos.valorASCII = Convert.ToChar(paraArchivo.Dequeue());
+                        datos.valorASCII += Convert.ToChar(paraArchivo2.Dequeue());
+                        listaDatos.Add(datos);
                     }
                 }
             }
@@ -260,7 +240,8 @@ namespace Compresor.Huffman
             linea = cola.cantidadBytes + cantidadValores.ToString();
             foreach (var item in datos)
             {
-                linea += item.caracter + item.valorASCII;
+                linea += item.caracter;
+                linea += item.valorASCII;
             }
             linea += textoComprimido;
             return linea;
@@ -313,17 +294,25 @@ namespace Compresor.Huffman
         private string RellenarCeros2Bytes(string cadenaBinaria){
             string bynariString = "";
 
-            int cerosFaltantes;
-            if (!((cerosFaltantes = cadenaBinaria.Length % 16) == 0))
+            if (cadenaBinaria != "0")
             {
-                string nuevaCadena = "";
-                string ceros = "";
+                int cerosFaltantes;
+                if (!((cerosFaltantes = 8-cadenaBinaria.Length) == 0))
+                {
+                    string nuevaCadena = "";
+                    string ceros = "";
 
-                for (int i=0; i< cerosFaltantes; i++) ceros += "0";
-                nuevaCadena = ceros + cadenaBinaria;
-                cadenaBinaria = nuevaCadena;
+                    for (int i = 0; i < cerosFaltantes; i++) ceros += "0";
+                    nuevaCadena = ceros + cadenaBinaria;
+                    cadenaBinaria = nuevaCadena;
+                }
+                bynariString += cadenaBinaria;
             }
-            bynariString += cadenaBinaria;
+            else
+            {
+                bynariString = "00000000";
+            }
+            
 
             return bynariString;
         }

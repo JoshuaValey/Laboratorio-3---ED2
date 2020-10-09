@@ -11,7 +11,7 @@ namespace PruebaCompresor
         static void Main(string[] args)
         {
             Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
-            FileStream file = new FileStream(@"./Prueba.txt", FileMode.Open);
+            FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\Prueba.txt", FileMode.Open);
             string comprimido = compresor.Comprimir(file);
 
             
