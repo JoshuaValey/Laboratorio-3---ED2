@@ -155,7 +155,7 @@ namespace Compresor.Huffman
                 //textoComprimido += encoder.GetString(paraASCII);
                // textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
             }
-            textoComprimido = Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII.ToArray());
+            textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII.ToArray());
             return textoComprimido;
         }
 
