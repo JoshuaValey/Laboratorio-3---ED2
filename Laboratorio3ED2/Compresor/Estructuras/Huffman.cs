@@ -304,7 +304,17 @@ namespace Compresor.Huffman
 
 
 
+        private int CadenaBinAInt(string cadenaBinaria)
+        {
+            int resultado = 0;
 
+            int[] baseDecimal = {128,64,32,16,8,4,2,1};
+            
+            for (int i = 0; i < 8; i++)
+                if (cadenaBinaria[i] == 1) resultado += baseDecimal[i];
+            
+            return resultado;
+        }
 
 
 
