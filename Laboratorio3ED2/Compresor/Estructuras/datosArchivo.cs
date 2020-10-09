@@ -7,6 +7,6 @@ namespace Compresor.Estructuras
     class datosArchivo
     {
         public string caracter { get; set; }
-        public string valorASCII { get; set; }
+        public char valorASCII { get; set; }
     }
 }

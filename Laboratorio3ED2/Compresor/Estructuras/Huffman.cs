@@ -145,17 +145,19 @@ namespace Compresor.Huffman
             codigosOcho = codigosSplit(8, codigoBinario);
             //byte[] paraASCII = new byte[8];
             Queue<byte> paraASCII = new Queue<byte>();
-
             
             foreach (var item in codigosOcho)
             {
                 //paraASCII = Encoding.ASCII.GetBytes(item);
                 paraASCII.Enqueue(Convert.ToByte(CadenaBinAInt(item)));
-                
                 //textoComprimido += encoder.GetString(paraASCII);
-               // textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
+                //textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
             }
-            textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII.ToArray());
+            foreach(var item in paraASCII)
+            {
+                textoComprimido += Convert.ToChar(item);
+            }
+            //textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII.ToArray());
             return textoComprimido;
         }
 
@@ -180,12 +182,12 @@ namespace Compresor.Huffman
             int valor2 = 0;
             string valorCero;
             string valorBinario;
-            byte[] paraArchivo = new byte[8];
-            byte[] paraArchivo2 = new byte[8];
+            Queue<byte> paraArchivo = new Queue<byte>();
+            Queue<byte> paraArchivo2 = new Queue<byte>();
             datosArchivo datos = new datosArchivo();
 
             //verifica si hay algun caracter que se repita mas se 256 veces, si lo hace, se agrega un numero a la cantidad de valores despues de la letra
-            for (int i = 0; i < cantidadCaracteres; i++)
+            for (int i = 0; i < cola.cantidadBytes; i++)
             {
                 if (cola.colaPrioridad[i].prioridad > 256)
                 {
@@ -194,15 +196,15 @@ namespace Compresor.Huffman
             }
 
             //metodo para crear lista con datos para archivo
-            for (int i = 0; i < cantidadCaracteres; i++)
+            for (int i = 0; i < cola.cantidadBytes; i++)
             {
                 //caso de que ningun valor pase las 256 repeticiones
                 if (cantidadValores == 1)
                 {
                     valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
-                    paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
+                    paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
                     datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                    datos.valorASCII = encoder.GetString(paraArchivo);
+                    datos.valorASCII = Convert.ToChar(paraArchivo);
                     listaDatos.Add(datos);
                 }
                 else //caso de que si pasen las 256 repeticiones 
@@ -211,10 +213,11 @@ namespace Compresor.Huffman
                     {
                         valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
                         valorCero = Convert.ToString(0, 2);
-                        paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
-                        paraArchivo2 = Encoding.ASCII.GetBytes(valorCero);
+                        paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
+                        paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(valorCero)));
                         datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                        datos.valorASCII = encoder.GetString(paraArchivo2) + encoder.GetString(paraArchivo);
+                        datos.valorASCII = Convert.ToChar(valor2);
+                        datos.valorASCII += Convert.ToChar(valor1);
                         listaDatos.Add(datos);
                     }
                     else //caso de que si pasa las 256
@@ -223,9 +226,10 @@ namespace Compresor.Huffman
                         {
                             valor2 = cola.colaPrioridad[i].prioridad / 2;
                             valorBinario = Convert.ToString(valor2, 2);
-                            paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
+                            paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
                             datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                            datos.valorASCII = encoder.GetString(paraArchivo) + encoder.GetString(paraArchivo);
+                            datos.valorASCII = Convert.ToChar(paraArchivo);
+                            datos.valorASCII += Convert.ToChar(paraArchivo);
                             listaDatos.Add(datos);
                         }
                         else //frecuencia es impar
@@ -234,10 +238,11 @@ namespace Compresor.Huffman
                             valor2 = valor1 + 1;
                             valorBinario = Convert.ToString(valor1, 2);
                             valorCero = Convert.ToString(valor2, 2);
-                            paraArchivo = Encoding.ASCII.GetBytes(valorBinario);
-                            paraArchivo2 = Encoding.ASCII.GetBytes(valorCero);
+                            paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(valorBinario)));
+                            paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(valorCero)));
                             datos.caracter = cola.colaPrioridad[i].valor.ToString();
-                            datos.valorASCII = encoder.GetString(paraArchivo) + encoder.GetString(paraArchivo2);
+                            datos.valorASCII = Convert.ToChar(paraArchivo);
+                            datos.valorASCII += Convert.ToChar(paraArchivo2);
                             listaDatos.Add(datos);
                         }
                     }
@@ -252,7 +257,7 @@ namespace Compresor.Huffman
         private string escribirArchivo(List<datosArchivo> datos)
         {
             string linea;
-            linea = cantidadCaracteres + cantidadValores.ToString();
+            linea = cola.cantidadBytes + cantidadValores.ToString();
             foreach (var item in datos)
             {
                 linea += item.caracter + item.valorASCII;

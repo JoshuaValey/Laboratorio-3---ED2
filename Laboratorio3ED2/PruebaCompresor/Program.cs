@@ -10,12 +10,12 @@ namespace PruebaCompresor
     {
         static void Main(string[] args)
         {
-           /* Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
+            Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
             FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\Prueba.txt", FileMode.Open);
-            string comprimido = compresor.Comprimir(file);*/
+            string comprimido = compresor.Comprimir(file);
 
             
-            Console.WriteLine(CadenaBinAInt("11111111").ToString());
+            //Console.WriteLine(CadenaBinAInt("11111111").ToString());
         }
 
          static int CadenaBinAInt(string cadenaBinaria)
