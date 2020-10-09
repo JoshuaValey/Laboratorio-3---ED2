@@ -118,21 +118,47 @@ namespace Compresor.Huffman
 
             return resultado;
         }
-        public string devolverASCII(string codigoBinario)
+       /* public string devolverASCII(string codigoBinario)
         {
             System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
             List<string> codigosOcho = new List<string>();
             codigosOcho = codigosSplit(8, codigoBinario);
             byte[] paraASCII = new byte[8];
 
+            int i = 0;
             foreach (var item in codigosOcho)
             {
-                paraASCII = Encoding.ASCII.GetBytes(item);
+                //paraASCII = Encoding.ASCII.GetBytes(item);
+                paraASCII[i]  = Convert.ToByte(CadenaBinAInt(item));
+                i++;
                 //textoComprimido += encoder.GetString(paraASCII);
                 textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
             }
+            //textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
+            return textoComprimido;
+        }*/
+
+         public string devolverASCII(string codigoBinario)
+        {
+            System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
+            List<string> codigosOcho = new List<string>();
+            codigosOcho = codigosSplit(8, codigoBinario);
+            //byte[] paraASCII = new byte[8];
+            Queue<byte> paraASCII = new Queue<byte>();
+
+            
+            foreach (var item in codigosOcho)
+            {
+                //paraASCII = Encoding.ASCII.GetBytes(item);
+                paraASCII.Enqueue(Convert.ToByte(CadenaBinAInt(item)));
+                
+                //textoComprimido += encoder.GetString(paraASCII);
+               // textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
+            }
+            textoComprimido = Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII.ToArray());
             return textoComprimido;
         }
+
         private List<string> codigosSplit(int splitSize, string codigoBinario)
         {
             int stringLength = codigoBinario.Length;
