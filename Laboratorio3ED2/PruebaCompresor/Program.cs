@@ -1,10 +1,8 @@
 ﻿using System;
 using Compresor.Estructuras;
 using System.Collections.Generic;
+using Compresor.Estructuras;
 using System.IO;
-
-
-
 
 namespace PruebaCompresor
 {
