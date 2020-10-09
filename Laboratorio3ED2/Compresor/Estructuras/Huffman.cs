@@ -15,7 +15,7 @@ namespace Compresor.Huffman
         public NodoHuff<byte> Raiz { get; set; }
         public Dictionary<byte, string> codigosBytePrefijo = new Dictionary<byte, string>();
         public Dictionary<string, byte> cogdigosPrefijoByte = new Dictionary<string, byte>();
-        public string textoComprimido { get; set; }
+        public string textoComprimido = "";
         ColaED1<NodoHuff<byte>> colaPrioridad = new ColaED1<NodoHuff<byte>>();
         static ColaPrioridad<byte> cola = new ColaPrioridad<byte>();
         List<datosArchivo> listaDatos = new List<datosArchivo>();
@@ -74,11 +74,13 @@ namespace Compresor.Huffman
                 }
                 else
                 {
-                    auxPadre.ProbPrio = auxDer.ProbPrio + auxIzqu.ProbPrio;
+                    //auxPadre.ProbPrio = auxDer.ProbPrio + auxIzqu.ProbPrio;
+                    auxPadre.Frecuencia = auxDer.Frecuencia + auxIzqu.Frecuencia;
                     auxPadre.Derecho = auxDer;
                     auxPadre.Inzquierdo = auxIzqu;
 
-                    cola.Insert(auxPadre.ProbPrio, auxPadre);
+                    cola.Insert(auxPadre.Frecuencia, auxPadre);
+                    //cola.Insert(auxPadre.ProbPrio, auxPadre);
 
                     CrearArbol(cola);
                 }
@@ -128,7 +130,8 @@ namespace Compresor.Huffman
             foreach (var item in codigosOcho)
             {
                 paraASCII = Encoding.ASCII.GetBytes(item);
-                textoComprimido += encoder.GetString(paraASCII);
+                //textoComprimido += encoder.GetString(paraASCII);
+                textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
             }
             return textoComprimido;
         }
@@ -138,10 +141,10 @@ namespace Compresor.Huffman
             List<string> codigos = new List<string>();
             for (int i = 0; i < stringLength; i += splitSize)
             {
-                if ((i + splitSize) > stringLength)
+                if ((i + splitSize) < stringLength)
                 {
-                    splitSize = stringLength - 1;
-                    codigos.Add(codigoBinario.Substring(i, splitSize));
+                    codigos.Add(codigoBinario.Substring(i, 8));
+                    //splitSize = splitSize + 8;
                 }
             }
             return codigos;

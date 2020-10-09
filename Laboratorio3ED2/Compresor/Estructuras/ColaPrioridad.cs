@@ -13,7 +13,7 @@ namespace Compresor.Estructuras
     {
         int contador = 0;
         public List<NodoCola<T>> colaPrioridad = new List<NodoCola<T>>();
-        NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
+        //NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
         ColaED1<NodoHuff<byte>> priorityQueue = new ColaED1<NodoHuff<byte>>();
         public List<byte> arregloBytes = new List<byte>();
         public int cantidadBytes = 0;
@@ -32,10 +32,14 @@ namespace Compresor.Estructuras
 
             for(int i = 0; i < colaPrioridad.Count; i++)
             {
+                NodoHuff<byte> nodoHuffman = new NodoHuff<byte>();
                 nodoHuffman.Value = colaPrioridad[i].valor;
-                nodoHuffman.Frecuencia = colaPrioridad[i].prioridad;
-                nodoHuffman.ProbPrio = colaPrioridad[i].prioridad % contador;
-                priorityQueue.Insert(nodoHuffman.ProbPrio, nodoHuffman);
+                //nodoHuffman.Frecuencia = colaPrioridad[i].prioridad;
+                //nodoHuffman.ProbPrio = colaPrioridad[i].prioridad / contador;
+                //priorityQueue.Insert(nodoHuffman.ProbPrio, nodoHuffman);
+                nodoHuffman.Frecuencia = Decimal.Divide(colaPrioridad[i].prioridad, contador);
+                nodoHuffman.ProbPrio = colaPrioridad[i].prioridad;
+                priorityQueue.Insert(nodoHuffman.Frecuencia, nodoHuffman);
             }
             return priorityQueue;
         }
