@@ -69,18 +69,16 @@ namespace Compresor.Huffman
                 if (auxIzqu == null)
                 {
                     Raiz = auxDer;
-                    Raiz.ProbPrio = 1;
+                    Raiz.Frecuencia = 1;
                     GenerarPrefijos();
                 }
                 else
                 {
-                    //auxPadre.ProbPrio = auxDer.ProbPrio + auxIzqu.ProbPrio;
                     auxPadre.Frecuencia = auxDer.Frecuencia + auxIzqu.Frecuencia;
                     auxPadre.Derecho = auxDer;
                     auxPadre.Inzquierdo = auxIzqu;
 
                     cola.Insert(auxPadre.Frecuencia, auxPadre);
-                    //cola.Insert(auxPadre.ProbPrio, auxPadre);
 
                     CrearArbol(cola);
                 }
@@ -88,7 +86,7 @@ namespace Compresor.Huffman
             catch (System.NullReferenceException ex)
             {
                 Raiz = auxDer;
-                Raiz.ProbPrio = 1;
+                Raiz.Frecuencia = 1;
                 GenerarPrefijos();
 
             }
@@ -144,7 +142,6 @@ namespace Compresor.Huffman
                 if ((i + splitSize) < stringLength)
                 {
                     codigos.Add(codigoBinario.Substring(i, 8));
-                    //splitSize = splitSize + 8;
                 }
             }
             return codigos;
