@@ -1,15 +1,9 @@
 ﻿using System;
 using Compresor.Estructuras;
 using System.Collections.Generic;
-<<<<<<< HEAD
 using Compresor.Estructuras;
 using System.IO;
 
-
-
-=======
-using System.IO;
->>>>>>> ebfcf7cb4bd9cd3d640fb6508d59426066048de7
 
 namespace PruebaCompresor
 {

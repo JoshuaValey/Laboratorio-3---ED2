@@ -83,13 +83,14 @@ namespace Compresor.ColaLabED1
 
         T Deleting()
         {
+            Node<T> aux = new Node<T>();
             if (size > -1)
             {
-                T data = priorityQueue[0].value;
-                priorityQueue[0] = priorityQueue[size];
+                ordenar();
+                //maxHeap(0);
+                T data = priorityQueue[size].value;
                 priorityQueue.RemoveAt(size);
                 size--;
-                maxHeap(0);
                 return data;
             }
             else
@@ -98,6 +99,25 @@ namespace Compresor.ColaLabED1
             }
         }
 
+        public void ordenar()
+        {
+            Node<T> aux = new Node<T>();
+            for (int j = 0; j < priorityQueue.Count; j++)
+            {
+                if (j < 7)
+                {
+                    for(int i = 0; i < priorityQueue.Count - 1; i++)
+                    {
+                        if (priorityQueue[i].priority.CompareTo(priorityQueue[i + 1].priority) == -1)
+                        {
+                            aux = priorityQueue[i + 1];
+                            priorityQueue[i + 1] = priorityQueue[i];
+                            priorityQueue[i] = aux;
+                        }
+                    }
+                }
+            }
+        }
         public void Insert(decimal value, T data)
         {
             Inserting(value, data);
