@@ -23,10 +23,11 @@ namespace Laboratorio3ED2.Controllers
          {
             try
             {
-                FileStream fileStream = new FileStream($"./{name}.huff", FileMode.Create, FileAccess.ReadWrite);
+                FileStream fileStream = new FileStream($"./{name}.huff", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 await file.CopyToAsync(fileStream);
                 Huffman<string> compress = new Huffman<string>();
                 string textoCom = compress.Comprimir(fileStream);
+                FileStreamResult fileResultado = new FileStreamResult(fileStream, "text/txt");
                 return StatusCode(200);
             }
             catch
@@ -37,15 +38,14 @@ namespace Laboratorio3ED2.Controllers
          }
 
         [HttpPost("decompress")]
-        public async Task<File> Decompress([FromFile] IFormFile file)
+        public async Task<ActionResult> Decompress([FromFile] IFormFile file)
          {
             FileStream fileStream = new FileStream($"./newText.txt", FileMode.Create, FileAccess.ReadWrite);
             await file.CopyToAsync(fileStream);
 
             Huffman<string> decompress = new Huffman<string>();
-            return decompress.DesComprimir(fileStream);
-            
-            //return StatusCode(200);
+            decompress.Descomprimir("");
+            return StatusCode(200);
          }
         
 

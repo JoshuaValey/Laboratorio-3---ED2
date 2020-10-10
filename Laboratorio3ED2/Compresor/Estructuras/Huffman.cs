@@ -165,7 +165,7 @@ namespace Compresor.Huffman
             foreach (var item in codigosOcho)
             {
                 //paraASCII = Encoding.ASCII.GetBytes(item);
-                paraASCII.Enqueue(Convert.ToByte(CadenaBinAInt(item)));
+                paraASCII.Enqueue(Convert.ToByte(item,2));
                 //textoComprimido += encoder.GetString(paraASCII);
                 //textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
             }
@@ -373,7 +373,7 @@ namespace Compresor.Huffman
             //El arbol debe estar creado en este momento para que el diccionario de prefijos exista. 
             string prefijo = "";
             int cont = 0;
-            for (int i = 0; i < binaryString.Length/2; i++)
+            for (int i = 0; i < binaryString.Length; i++)
             {
                 prefijo += binaryString[i];
                 if (cogdigosPrefijoByte.ContainsKey(prefijo))
