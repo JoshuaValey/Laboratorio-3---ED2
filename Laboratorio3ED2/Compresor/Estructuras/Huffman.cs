@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -27,6 +28,7 @@ namespace Compresor.Huffman
         string lineaArchivo;
         List<byte> cadenaBytes = new List<byte>();
         string cadenaB;
+        int contador;
 
         public string Comprimir(FileStream archivo)
         {
@@ -42,16 +44,25 @@ namespace Compresor.Huffman
         public string Descomprimir(string lineaArch)
         {
             List<byte> listaADescomprimir = new List<byte>();
+            List<string> listaBin = new List<string>();
             string docDescomprimido = "";
+            //CrearArbol(leerArchivo(lineaArch));
             leerArchivo(lineaArch);
-            string aDescomprimir = BynaryEncode(cadenaBytes, colaPrioridad);
-            //aDescomprimir = StringCompressedToBinaryString(aDescomprimir);
-            listaADescomprimir = StringBinarioAMensaje(aDescomprimir);
-            
+            string cadenaAscii = "";
+
+            foreach(var item in cadenaBytes)
+            {
+                cadenaAscii += Convert.ToChar(item);
+            }
+
+            string bynariString = StringCompressedToBinaryString(cadenaAscii);
+            listaADescomprimir = StringBinarioAMensaje(bynariString);
+
             foreach(var item in listaADescomprimir)
             {
                 docDescomprimido += Convert.ToChar(item);
             }
+
             return docDescomprimido;
 
         }
@@ -386,7 +397,6 @@ namespace Compresor.Huffman
 
             int noValores = bytesLinea[0];
             int noBytes = bytesLinea[1];
-            int contador = 0;
 
             for (int i = 2; i <= (noValores * noBytes) + 1; i++)
             {
@@ -407,6 +417,7 @@ namespace Compresor.Huffman
             for(int i = (noValores * noBytes) + 2; i < bytesLinea.Length; i++)
             {
                 cadenaBytes.Add(bytesLinea[i]);
+                cadenaB += Convert.ToChar(bytesLinea[i]);
             }
 
             colaPrioridad.ordenar();
