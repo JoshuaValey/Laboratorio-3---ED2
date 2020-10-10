@@ -38,6 +38,8 @@ namespace Compresor.Huffman
             lineaArchivo = escribirArchivo(datosParaArchivo());
             documento.WriteLine(lineaArchivo);
             documento.Close();
+            codigosBytePrefijo = new Dictionary<byte, string>();
+            cogdigosPrefijoByte = new Dictionary<string, byte>();
             return textoComprimido;
         }
 
@@ -46,7 +48,7 @@ namespace Compresor.Huffman
             List<byte> listaADescomprimir = new List<byte>();
             List<string> listaBin = new List<string>();
             string docDescomprimido = "";
-            //CrearArbol(leerArchivo(lineaArch));
+            CrearArbol(leerArchivo(lineaArch));
             leerArchivo(lineaArch);
             string cadenaAscii = "";
 
