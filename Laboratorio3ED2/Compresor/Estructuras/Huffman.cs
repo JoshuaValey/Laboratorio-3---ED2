@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using Compresor.ColaLabED1;
 using Compresor.Estructuras;
 using Compresor.Huffman;
 using Compresor.Interfaces;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Compresor.Huffman
 {
@@ -23,6 +25,8 @@ namespace Compresor.Huffman
         int cantidadValores = 0;
         StreamWriter documento = new StreamWriter(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt");
         string lineaArchivo;
+        List<byte> cadenaBytes = new List<byte>();
+        string cadenaB;
 
         public string Comprimir(FileStream archivo)
         {
@@ -33,6 +37,23 @@ namespace Compresor.Huffman
             documento.WriteLine(lineaArchivo);
             documento.Close();
             return textoComprimido;
+        }
+
+        public string Descomprimir(string lineaArch)
+        {
+            List<byte> listaADescomprimir = new List<byte>();
+            string docDescomprimido = "";
+            leerArchivo(lineaArch);
+            string aDescomprimir = BynaryEncode(cadenaBytes, colaPrioridad);
+            //aDescomprimir = StringCompressedToBinaryString(aDescomprimir);
+            listaADescomprimir = StringBinarioAMensaje(aDescomprimir);
+            
+            foreach(var item in listaADescomprimir)
+            {
+                docDescomprimido += Convert.ToChar(item);
+            }
+            return docDescomprimido;
+
         }
         private void GenerarPrefijos()
         {
@@ -119,27 +140,8 @@ namespace Compresor.Huffman
 
             return resultado;
         }
-       /* public string devolverASCII(string codigoBinario)
-        {
-            System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
-            List<string> codigosOcho = new List<string>();
-            codigosOcho = codigosSplit(8, codigoBinario);
-            byte[] paraASCII = new byte[8];
 
-            int i = 0;
-            foreach (var item in codigosOcho)
-            {
-                //paraASCII = Encoding.ASCII.GetBytes(item);
-                paraASCII[i]  = Convert.ToByte(CadenaBinAInt(item));
-                i++;
-                //textoComprimido += encoder.GetString(paraASCII);
-                textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
-            }
-            //textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
-            return textoComprimido;
-        }*/
-
-         public string devolverASCII(string codigoBinario)
+        public string devolverASCII(string codigoBinario)
         {
             System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
             List<string> codigosOcho = new List<string>();
@@ -175,6 +177,7 @@ namespace Compresor.Huffman
             }
             return codigos;
         }
+
         private List<datosArchivo> datosParaArchivo()
         {
             cantidadValores = 2;
@@ -208,6 +211,7 @@ namespace Compresor.Huffman
                         valor2 = cola.colaPrioridad[i].prioridad / 2;
                         valorBinario = Convert.ToString(valor2, 2);
                         paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
+                        paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
                         datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
                         datos.valorASCII = Convert.ToChar(paraArchivo.Dequeue());
                         datos.valorASCII += Convert.ToChar(paraArchivo.Dequeue());
@@ -233,11 +237,11 @@ namespace Compresor.Huffman
             return listaDatos;
         }
 
-
         private string escribirArchivo(List<datosArchivo> datos)
         {
-            string linea;
-            linea = cola.cantidadBytes + cantidadValores.ToString();
+            string linea = "";
+            linea += Convert.ToChar(cola.cantidadBytes);
+            linea += Convert.ToChar(cantidadValores);
             foreach (var item in datos)
             {
                 linea += item.caracter;
@@ -247,9 +251,8 @@ namespace Compresor.Huffman
             return linea;
         }
 
-
         /// <summary>
-        /// Método que resive la cadena de caracteres a descomprimir
+        /// Método que recibe la cadena de caracteres a descomprimir
         /// y la convierte a una cadena de ceros y unos.
         /// 
         /// </summary>
@@ -330,8 +333,9 @@ namespace Compresor.Huffman
 
                 return resultado;
         }
+
         /// <summary>
-        /// Método que resive la cadena de ceros y unos
+        /// Método que recibe la cadena de ceros y unos
         /// y a través del diccionario con los códigos prefigo
         /// vuelve a armar el mensaje original en bytes
         /// </summary>
@@ -356,8 +360,6 @@ namespace Compresor.Huffman
             return mensaje;
         }
 
-
-
         /// <summary>
         /// Este método resive una cadena de ceros y unos, ejemplo:
         /// "10110011" y la convierte en un número entero para posteriormente
@@ -365,7 +367,7 @@ namespace Compresor.Huffman
         /// </summary>
         /// <param name="cadenaBinaria">Cadena de ceros y unos</param> 
         /// <returns>Entero decimal que será convertido a ASCII</returns>
-         private int CadenaBinAInt(string cadenaBinaria)
+        private int CadenaBinAInt(string cadenaBinaria)
         {
             int resultado = 0;
 
@@ -375,6 +377,40 @@ namespace Compresor.Huffman
                 if (cadenaBinaria[i] == '1') resultado += baseDecimal[i];
             
             return resultado;
+        }
+
+        public ColaED1<NodoHuff<byte>> leerArchivo(string fileArchivo)
+        {
+            System.Text.ASCIIEncoding codificador = new System.Text.ASCIIEncoding();
+            byte[] bytesLinea = codificador.GetBytes(fileArchivo);
+
+            int noValores = bytesLinea[0];
+            int noBytes = bytesLinea[1];
+            int contador = 0;
+
+            for (int i = 2; i <= (noValores * noBytes) + 1; i++)
+            {
+                contador = contador + bytesLinea[i + 1];
+                i++;
+            }
+
+            for (int i = 2; i <= (noValores * noBytes)+1; i++)
+            {
+                NodoHuff<byte> nodoH = new NodoHuff<byte>();
+                nodoH.Value = bytesLinea[i];
+                nodoH.ProbPrio = bytesLinea[i+1];
+                nodoH.Frecuencia = Decimal.Divide(nodoH.ProbPrio, contador);
+                colaPrioridad.Insert(nodoH.Frecuencia, nodoH);
+                i++;
+            }
+
+            for(int i = (noValores * noBytes) + 2; i < bytesLinea.Length; i++)
+            {
+                cadenaBytes.Add(bytesLinea[i]);
+            }
+
+            colaPrioridad.ordenar();
+            return colaPrioridad;
         }
 
 

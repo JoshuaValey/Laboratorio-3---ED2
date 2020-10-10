@@ -38,6 +38,7 @@ namespace Compresor.Estructuras
                 nodoHuffman.ProbPrio = colaPrioridad[i].prioridad;
                 priorityQueue.Insert(nodoHuffman.Frecuencia, nodoHuffman);
             }
+            priorityQueue.ordenar();
             return priorityQueue;
         }
         public void evaluarCadena(byte[] cadena)
