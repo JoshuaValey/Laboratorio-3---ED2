@@ -29,13 +29,10 @@ namespace Compresor.Huffman
         string cadenaB;
         int contador;
 
-        public string Comprimir(FileStream archivo)
+        public string Comprimir(FileStream archivo, string nombre)
         {
-<<<<<<< HEAD
-            
-=======
-            StreamWriter documento = new StreamWriter(archivo);
->>>>>>> 7417fcb66faea2f65ecb48ff82822a429cd5c8ff
+            FileStream stream = new FileStream(nombre, FileMode.Create, FileAccess.Write);
+            StreamWriter documento = new StreamWriter(stream);
             colaPrioridad = cola.insert(archivo);
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);

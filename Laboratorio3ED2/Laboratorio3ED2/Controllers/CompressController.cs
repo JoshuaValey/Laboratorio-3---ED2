@@ -21,12 +21,13 @@ namespace Laboratorio3ED2.Controllers
          [HttpPost("compress/{name}")]
          public async Task<ActionResult> Compress([FromFile] IFormFile file, string name)
          {
+             string nombre = $"./{name}.huff";
             try
             {
-                FileStream fileStream = new FileStream($"./{name}.huff", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                FileStream fileStream = new FileStream($"./auxiliarLectura.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 await file.CopyToAsync(fileStream);
                 Huffman<string> compress = new Huffman<string>();
-                string textoCom = compress.Comprimir(fileStream);
+                string textoCom = compress.Comprimir(fileStream, nombre);
                 FileStreamResult fileResultado = new FileStreamResult(fileStream, "text/txt");
                 return StatusCode(200);
             }
@@ -42,11 +43,7 @@ namespace Laboratorio3ED2.Controllers
          {
              try
              {
-<<<<<<< HEAD
                  FileStream fileStream = new FileStream($"./Descomprimido.txt", FileMode.Create, FileAccess.Read);
-=======
-                 FileStream fileStream = new FileStream($"./Descomprimido.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
->>>>>>> 7417fcb66faea2f65ecb48ff82822a429cd5c8ff
                  await file.CopyToAsync(fileStream);
                  fileStream.Close();
             
