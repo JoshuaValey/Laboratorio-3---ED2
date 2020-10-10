@@ -31,7 +31,11 @@ namespace Compresor.Huffman
 
         public string Comprimir(FileStream archivo)
         {
+<<<<<<< HEAD
+            
+=======
             StreamWriter documento = new StreamWriter(archivo);
+>>>>>>> 7417fcb66faea2f65ecb48ff82822a429cd5c8ff
             colaPrioridad = cola.insert(archivo);
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
