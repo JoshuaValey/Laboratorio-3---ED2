@@ -19,6 +19,7 @@ namespace Compresor.Estructuras
         public int cantidadBytes = 0;
         public ColaED1<NodoHuff<byte>> insert(FileStream archivo)
         {
+            archivo.Position = 0;
             using var reader = new BinaryReader(archivo);
             var buffer = new byte[2000000];
             while (archivo.Position < archivo.Length)

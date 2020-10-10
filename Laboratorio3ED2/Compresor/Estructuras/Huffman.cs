@@ -24,7 +24,6 @@ namespace Compresor.Huffman
         List<datosArchivo> listaDatos = new List<datosArchivo>();
         int cantidadCaracteres = cola.cantidadBytes;
         int cantidadValores = 0;
-        StreamWriter documento = new StreamWriter(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt");
         string lineaArchivo;
         List<byte> cadenaBytes = new List<byte>();
         string cadenaB;
@@ -32,16 +31,19 @@ namespace Compresor.Huffman
 
         public string Comprimir(FileStream archivo)
         {
+<<<<<<< HEAD
             
+=======
+            StreamWriter documento = new StreamWriter(archivo);
+>>>>>>> 7417fcb66faea2f65ecb48ff82822a429cd5c8ff
             colaPrioridad = cola.insert(archivo);
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
             lineaArchivo = escribirArchivo(datosParaArchivo());
             documento.WriteLine(lineaArchivo);
-            documento.Close();
             codigosBytePrefijo = new Dictionary<byte, string>();
             cogdigosPrefijoByte = new Dictionary<string, byte>();
-            return textoComprimido;
+            return lineaArchivo;
         }
 
         public string Descomprimir(string lineaArch)
@@ -166,7 +168,7 @@ namespace Compresor.Huffman
             foreach (var item in codigosOcho)
             {
                 //paraASCII = Encoding.ASCII.GetBytes(item);
-                paraASCII.Enqueue(Convert.ToByte(CadenaBinAInt(item)));
+                paraASCII.Enqueue(Convert.ToByte(item,2));
                 //textoComprimido += encoder.GetString(paraASCII);
                 //textoComprimido += Encoding.Convert(Encoding.Unicode, Encoding.ASCII, paraASCII);
             }
@@ -374,7 +376,7 @@ namespace Compresor.Huffman
             //El arbol debe estar creado en este momento para que el diccionario de prefijos exista. 
             string prefijo = "";
             int cont = 0;
-            for (int i = 0; i < binaryString.Length/2; i++)
+            for (int i = 0; i < binaryString.Length; i++)
             {
                 prefijo += binaryString[i];
                 if (cogdigosPrefijoByte.ContainsKey(prefijo))
@@ -409,7 +411,7 @@ namespace Compresor.Huffman
 
         public ColaED1<NodoHuff<byte>> leerArchivo(string fileArchivo)
         {
-            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length - 2);
+            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length);
             System.Text.ASCIIEncoding codificador = new System.Text.ASCIIEncoding();
             byte[] bytesLinea = codificador.GetBytes(fileArchivo);
 
