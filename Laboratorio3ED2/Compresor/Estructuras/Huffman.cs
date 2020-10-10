@@ -32,6 +32,7 @@ namespace Compresor.Huffman
 
         public string Comprimir(FileStream archivo)
         {
+            
             colaPrioridad = cola.insert(archivo);
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
