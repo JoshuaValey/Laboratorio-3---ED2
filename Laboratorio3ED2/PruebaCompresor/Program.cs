@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Compresor.Estructuras;
 using System.Collections.Generic;
 using Compresor.Estructuras;
@@ -10,17 +10,17 @@ namespace PruebaCompresor
     {
         static void Main(string[] args)
         {
-           /* Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
-            FileStream file = new FileStream(@"./Prueba.txt", FileMode.Open);
-            string comprimido = compresor.Comprimir(file);*/
+            Compresor.Huffman.Huffman<byte> compresor = new Compresor.Huffman.Huffman<byte>();
+            //FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\Prueba.txt", FileMode.Open);
+            //string comprimido = compresor.Comprimir(file);
 
-            
+
+            //StreamReader file2 = new StreamReader(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt");
+            //compresor.leerArchivo(file2.ReadToEnd());
+            compresor.Descomprimir("marcelstdgiouz<2»¯ÎxL,a²	");
+
+
             //Console.WriteLine(CadenaBinAInt("11111111").ToString());
-            int a = 10; 
-
-            char dato = Convert.ToChar(a);
-
-            Console.WriteLine(dato);
         }
 
          static int CadenaBinAInt(string cadenaBinaria)

@@ -29,18 +29,21 @@ namespace Laboratorio3ED2.Controllers
             // return StatusCode(200);
          }*/
 
-         [HttpPost("decompress")]
+       /*  [HttpPost("decompress")]
 
         public async Task<File> Decompress([FromFile] IFormFile file)
          {
             FileStream fileStream = new FileStream($"./newText.txt", FileMode.Create, FileAccess.ReadWrite);
             await file.CopyToAsync(fileStream);
 
-            //Huffman<T> compress = new Huffman<T>();
-            //return compress.DesComprimir(fileStream);
+            //Huffman<T> decompress = new Huffman<T>();
+            //return decompress.DesComprimir(fileStream);
             
             // return StatusCode(200);
-         }
+         }*/
         
+
+        
+
     }
 }
