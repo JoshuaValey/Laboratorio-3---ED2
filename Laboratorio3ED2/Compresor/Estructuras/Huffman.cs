@@ -309,12 +309,13 @@ namespace Compresor.Huffman
         /// de separarla en dos bytes 
         /// </summary>
         /// <param name="cadenaBinaria">Arreglo de ceros y unos</param> 
+        /// <param name="bytes">La cantidad de bytes (Solo 1 o 2) que representa la cadena</param> 
         /// <returns>Una cadena de ceros y unos de 16 pos</returns>
-        private string RellenarCeros2Bytes(string cadenaBinaria){
+        private string RellenarCeros2Bytes(string cadenaBinaria, int bytes){
             string bynariString = "";
-
+            int posBits = (bytes == 1)?8:16;
             int cerosFaltantes;
-            if (!((cerosFaltantes = cadenaBinaria.Length % 16) == 0))
+            if (!((cerosFaltantes = cadenaBinaria.Length % posBits) == 0))
             {
                 string nuevaCadena = "";
                 string ceros = "";
