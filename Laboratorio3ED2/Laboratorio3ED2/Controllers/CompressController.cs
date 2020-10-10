@@ -24,10 +24,11 @@ namespace Laboratorio3ED2.Controllers
              string nombre = $"./{name}.huff";
             try
             {
+                FileStream filestream2 = new FileStream(nombre, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 FileStream fileStream = new FileStream($"./auxiliarLectura.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 await file.CopyToAsync(fileStream);
                 Huffman<string> compress = new Huffman<string>();
-                string textoCom = compress.Comprimir(fileStream, nombre);
+                string textoCom = compress.Comprimir(fileStream, filestream2);
                 FileStreamResult fileResultado = new FileStreamResult(fileStream, "text/txt");
                 return StatusCode(200);
             }

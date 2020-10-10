@@ -16,10 +16,10 @@ namespace PruebaCompresor
             string comprimido = compresor.Comprimir(file);
 
 
-            StreamReader file2 = new StreamReader(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt");
+            //StreamReader file2 = new StreamReader(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt");
             //compresor.leerArchivo(file2.ReadToEnd());
-            compresor.Descomprimir(file2.ReadToEnd());
-            compresor.Descomprimir("marcelstdgiouz<2»¯ÎxL,a²	");
+            //compresor.Descomprimir(file2.ReadToEnd());
+            //compresor.Descomprimir("marcelstdgiouz<2»¯ÎxL,a²	");
 
 
             //Console.WriteLine(CadenaBinAInt("11111111").ToString());

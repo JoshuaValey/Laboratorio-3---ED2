@@ -25,19 +25,20 @@ namespace Compresor.Huffman
         int cantidadCaracteres = cola.cantidadBytes;
         int cantidadValores = 0;
         string lineaArchivo;
+        FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt", FileMode.Open);
         List<byte> cadenaBytes = new List<byte>();
         string cadenaB;
         int contador;
 
-        public string Comprimir(FileStream archivo, string nombre)
+        public string Comprimir(FileStream archivo, FileStream archivoGuardar)
         {
-            FileStream stream = new FileStream(nombre, FileMode.Create, FileAccess.Write);
-            StreamWriter documento = new StreamWriter(stream);
+            StreamWriter documento = new StreamWriter(archivoGuardar);
             colaPrioridad = cola.insert(archivo);
             string codigoBinario = BynaryEncode(cola.arregloBytes, colaPrioridad);
             devolverASCII(codigoBinario);
             lineaArchivo = escribirArchivo(datosParaArchivo());
             documento.WriteLine(lineaArchivo);
+            documento.Close();
             codigosBytePrefijo = new Dictionary<byte, string>();
             cogdigosPrefijoByte = new Dictionary<string, byte>();
             return lineaArchivo;
@@ -408,7 +409,7 @@ namespace Compresor.Huffman
 
         public ColaED1<NodoHuff<byte>> leerArchivo(string fileArchivo)
         {
-            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length);
+            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length - 2);
             System.Text.ASCIIEncoding codificador = new System.Text.ASCIIEncoding();
             byte[] bytesLinea = codificador.GetBytes(fileArchivo);
 
