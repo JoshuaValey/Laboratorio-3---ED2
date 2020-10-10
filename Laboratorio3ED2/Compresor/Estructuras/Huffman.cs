@@ -407,7 +407,7 @@ namespace Compresor.Huffman
 
         public ColaED1<NodoHuff<byte>> leerArchivo(string fileArchivo)
         {
-            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length);
+            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length-2);
             System.Text.ASCIIEncoding codificador = new System.Text.ASCIIEncoding();
             byte[] bytesLinea = codificador.GetBytes(fileArchivo);
 
