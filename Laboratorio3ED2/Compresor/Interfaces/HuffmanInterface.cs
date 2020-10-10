@@ -7,6 +7,6 @@ namespace Compresor.Interfaces
 {
     interface HuffmanInterface<T> where T : IComparable
     {
-        public string Comprimir(FileStream archivo);
+        public string Comprimir(FileStream archivo, string nombre);
     }
 }
