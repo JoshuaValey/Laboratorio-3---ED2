@@ -42,7 +42,7 @@ namespace Laboratorio3ED2.Controllers
          {
              try
              {
-                 FileStream fileStream = new FileStream($"./Descomprimido.txt", FileMode.Create, FileAccess.ReadWrite);
+                 FileStream fileStream = new FileStream($"./Descomprimido.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                  await file.CopyToAsync(fileStream);
                  fileStream.Close();
             
