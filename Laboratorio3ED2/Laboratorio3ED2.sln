@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laboratorio3ED2", "Laboratorio3ED2\Laboratorio3ED2.csproj", "{125761B2-BA7E-4F77-8967-AEA34C882599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laboratorio3ED2", "Laboratorio3ED2\Laboratorio3ED2.csproj", "{125761B2-BA7E-4F77-8967-AEA34C882599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compresor", "Compresor\Compresor.csproj", "{882A8CC5-06D8-49D6-B05B-606D13A92DCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compresor", "Compresor\Compresor.csproj", "{882A8CC5-06D8-49D6-B05B-606D13A92DCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebaCompresor", "PruebaCompresor\PruebaCompresor.csproj", "{E7805CDB-4A6B-415E-91CE-B3E6D7737458}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PruebaCompresor", "PruebaCompresor\PruebaCompresor.csproj", "{E7805CDB-4A6B-415E-91CE-B3E6D7737458}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

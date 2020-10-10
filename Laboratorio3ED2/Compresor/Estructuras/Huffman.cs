@@ -49,12 +49,11 @@ namespace Compresor.Huffman
             List<string> listaBin = new List<string>();
             string docDescomprimido = "";
             CrearArbol(leerArchivo(lineaArch));
-            leerArchivo(lineaArch);
             string cadenaAscii = "";
 
             foreach(var item in cadenaBytes)
             {
-                cadenaAscii += Convert.ToChar(item);
+                cadenaAscii += (char)item;
             }
 
             string bynariString = StringCompressedToBinaryString(cadenaAscii);
@@ -62,7 +61,7 @@ namespace Compresor.Huffman
 
             foreach(var item in listaADescomprimir)
             {
-                docDescomprimido += Convert.ToChar(item);
+                docDescomprimido += (char)item;
             }
 
             return docDescomprimido;
@@ -144,12 +143,13 @@ namespace Compresor.Huffman
                 resultado += codigosBytePrefijo[item];
             }
 
-            int byteFaltante = resultado.Length % 8;
+
+            /*int byteFaltante = resultado.Length % 8;
             if (!(byteFaltante == 0))
             {
                 int caracteres = 8 - byteFaltante;
                 for (int i = caracteres; i > 0; i--) resultado += "0";
-            }
+            }*/
 
             return resultado;
         }
@@ -183,9 +183,13 @@ namespace Compresor.Huffman
             List<string> codigos = new List<string>();
             for (int i = 0; i < stringLength; i += splitSize)
             {
-                if ((i + splitSize) < stringLength)
+                if ((i + splitSize) <= stringLength)
                 {
                     codigos.Add(codigoBinario.Substring(i, 8));
+                }
+                else
+                {
+                    codigos.Add(codigoBinario.Substring(i));
                 }
             }
             return codigos;
@@ -281,8 +285,17 @@ namespace Compresor.Huffman
                 long dato = Convert.ToInt32(caracter);
                 string cadenaBinaria = Convert.ToString(dato, 2);
 
-                int cerosFaltantes;
-                if (!((cerosFaltantes = cadenaBinaria.Length % 8) == 0))
+                if (i == cadenaCaracteres.Length - 1)
+                {
+                    binaryString += cadenaBinaria;
+                }
+                else
+                {
+                    binaryString += cadenaBinaria.PadLeft(8, '0');
+                }
+
+                /*int cerosFaltantes;
+                if (!((cerosFaltantes = 8-cadenaBinaria.Length) == 0))
                 {
                     string nuevaCadena = "";
                     string ceros = "";
@@ -292,11 +305,10 @@ namespace Compresor.Huffman
                     cadenaBinaria = nuevaCadena;
 
 
-                }
-                binaryString += cadenaBinaria;
+                }*/
+                
 
             }
-
             return binaryString;
         }
 
@@ -360,15 +372,17 @@ namespace Compresor.Huffman
             List<byte> mensaje = new List<byte>();
             //El arbol debe estar creado en este momento para que el diccionario de prefijos exista. 
             string prefijo = "";
-            for (int i = 0; i < binaryString.Length; i++)
+            int cont = 0;
+            for (int i = 0; i < binaryString.Length/2; i++)
             {
                 prefijo += binaryString[i];
                 if (cogdigosPrefijoByte.ContainsKey(prefijo))
                 {
                     mensaje.Add(cogdigosPrefijoByte[prefijo]);
                     prefijo = "";
+                    i = cont;
                 }
-
+                cont++;
             }
             return mensaje;
         }
@@ -394,6 +408,7 @@ namespace Compresor.Huffman
 
         public ColaED1<NodoHuff<byte>> leerArchivo(string fileArchivo)
         {
+            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length - 2);
             System.Text.ASCIIEncoding codificador = new System.Text.ASCIIEncoding();
             byte[] bytesLinea = codificador.GetBytes(fileArchivo);
 
