@@ -5,7 +5,7 @@
 
 ### Objetivos:
 -  Aplicar los conceptos de la codificación de Huffman
--  Aplicar los conceptos de razones de compresión (Faltó implementar)
+-  Aplicar los conceptos de razones de compresión 
 
 
 ## API debe cumplir con los siguientes requerimientos:
@@ -24,7 +24,7 @@ comprimido
 
 
 ####  Ruta: /api/compressions
-■ GET (Faltó implementar)
+■ GET 
  - Devuelve un JSON con el listado de todas las compresiones
 con los siguientes valores:
 *  Nombre del archivo original
