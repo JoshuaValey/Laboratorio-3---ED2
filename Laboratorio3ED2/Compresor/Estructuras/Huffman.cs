@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
 using Compresor.ColaLabED1;
@@ -25,10 +26,11 @@ namespace Compresor.Huffman
         int cantidadCaracteres = cola.cantidadBytes;
         int cantidadValores = 0;
         string lineaArchivo;
-        FileStream file = new FileStream(@"C:\Users\marce\Desktop\2020\Semestre II 2020\Estructura de datos II\Laboratorio\Laboratorio-3---ED2\Laboratorio3ED2\PruebaCompresor\datosCompresion.txt", FileMode.Open);
         List<byte> cadenaBytes = new List<byte>();
-        string cadenaB;
         int contador;
+        string asciss = "";
+        int cantidadValoresString;
+        int contadorItem = 0;
 
         public string Comprimir(FileStream archivo, FileStream archivoGuardar)
         {
@@ -50,14 +52,10 @@ namespace Compresor.Huffman
             List<string> listaBin = new List<string>();
             string docDescomprimido = "";
             CrearArbol(leerArchivo(lineaArch));
-            string cadenaAscii = "";
 
-            foreach(var item in cadenaBytes)
-            {
-                cadenaAscii += (char)item;
-            }
+            string cadenaComprimida = lineaArch.Substring(cantidadValoresString, lineaArch.Length-cantidadValoresString);
 
-            string bynariString = StringCompressedToBinaryString(cadenaAscii);
+            string bynariString = StringCompressedToBinaryString(cadenaComprimida);
             listaADescomprimir = StringBinarioAMensaje(bynariString);
 
             foreach(var item in listaADescomprimir)
@@ -139,18 +137,19 @@ namespace Compresor.Huffman
         {
             CrearArbol(cola);
             string resultado = "";
-            foreach (var item in cadena)
+
+            for (int i = 0; i < cadena.Count; i++)
             {
-                resultado += codigosBytePrefijo[item];
+                if (i == cadena.Count - 1)
+                {
+                    contadorItem = 16 - codigosBytePrefijo[cadena[i]].Length;
+                    resultado += codigosBytePrefijo[cadena[i]].PadRight(16, '0');
+                }
+                else
+                {
+                    resultado += codigosBytePrefijo[cadena[i]];
+                }
             }
-
-
-            /*int byteFaltante = resultado.Length % 8;
-            if (!(byteFaltante == 0))
-            {
-                int caracteres = 8 - byteFaltante;
-                for (int i = caracteres; i > 0; i--) resultado += "0";
-            }*/
 
             return resultado;
         }
@@ -198,7 +197,7 @@ namespace Compresor.Huffman
 
         private List<datosArchivo> datosParaArchivo()
         {
-            cantidadValores = 2;
+            cantidadValores = 1;
             System.Text.Encoding encoder = System.Text.ASCIIEncoding.ASCII;
             int valor1 = 0;
             int valor2 = 0;
@@ -207,19 +206,26 @@ namespace Compresor.Huffman
             Queue<byte> paraArchivo = new Queue<byte>();
             Queue<byte> paraArchivo2 = new Queue<byte>();
 
+            for(int i = 0; i < cola.cantidadBytes; i++)
+            {
+                if(cola.colaPrioridad[i].prioridad >= 256)
+                {
+                    cantidadValores = 2;
+                }
+            }
             //metodo para crear lista con datos para archivo
             for (int i = 0; i < cola.cantidadBytes; i++)
             {
                 datosArchivo datos = new datosArchivo();
                 if (cola.colaPrioridad[i].prioridad <= 256) //caso de que ese en especifico no pase las 256
                 {
-                    valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad, 2);
-                    valorCero = Convert.ToString(0, 2);
+                    valorBinario = Convert.ToString(cola.colaPrioridad[i].prioridad - 1, 2);
+                    valorCero = Convert.ToString(1, 2);
                     paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
                     paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorCero))));
                     datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
                     datos.valorASCII = Convert.ToChar(paraArchivo2.Dequeue());
-                    datos.valorASCII += Convert.ToChar(paraArchivo.Dequeue());
+                    datos.valorASCII2 = Convert.ToChar(paraArchivo.Dequeue());
                     listaDatos.Add(datos);
                 }
                 else //caso de que si pasa las 256
@@ -232,7 +238,7 @@ namespace Compresor.Huffman
                         paraArchivo.Enqueue(Convert.ToByte(CadenaBinAInt(RellenarCeros2Bytes(valorBinario))));
                         datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
                         datos.valorASCII = Convert.ToChar(paraArchivo.Dequeue());
-                        datos.valorASCII += Convert.ToChar(paraArchivo.Dequeue());
+                        datos.valorASCII2 = Convert.ToChar(paraArchivo.Dequeue());
                         listaDatos.Add(datos);
                     }
                     else //frecuencia es impar
@@ -245,7 +251,7 @@ namespace Compresor.Huffman
                         paraArchivo2.Enqueue(Convert.ToByte(CadenaBinAInt(valorCero)));
                         datos.caracter = Convert.ToChar(cola.colaPrioridad[i].valor);
                         datos.valorASCII = Convert.ToChar(paraArchivo.Dequeue());
-                        datos.valorASCII += Convert.ToChar(paraArchivo2.Dequeue());
+                        datos.valorASCII2 = Convert.ToChar(paraArchivo2.Dequeue());
                         listaDatos.Add(datos);
                     }
                 }
@@ -260,10 +266,12 @@ namespace Compresor.Huffman
             string linea = "";
             linea += Convert.ToChar(cola.cantidadBytes);
             linea += Convert.ToChar(cantidadValores);
+            linea += Convert.ToChar(contadorItem);
             foreach (var item in datos)
             {
                 linea += item.caracter;
                 linea += item.valorASCII;
+                linea += item.valorASCII2;
             }
             linea += textoComprimido;
             return linea;
@@ -282,33 +290,18 @@ namespace Compresor.Huffman
 
             for (int i = 0; i < cadenaCaracteres.Length; i++)
             {
-                char caracter = Convert.ToChar(cadenaCaracteres[i]);
-                long dato = Convert.ToInt32(caracter);
+               // char caracter = Convert.ToChar(cadenaCaracteres[i]);
+                int dato = Convert.ToInt32(cadenaCaracteres[i]);
                 string cadenaBinaria = Convert.ToString(dato, 2);
 
                 if (i == cadenaCaracteres.Length - 1)
-                {
-                    binaryString += cadenaBinaria;
-                }
-                else
-                {
-                    binaryString += cadenaBinaria.PadLeft(8, '0');
-                }
-
-                /*int cerosFaltantes;
-                if (!((cerosFaltantes = 8-cadenaBinaria.Length) == 0))
-                {
-                    string nuevaCadena = "";
-                    string ceros = "";
-
-                    for (int j = 0; j < cerosFaltantes; j++) ceros += "0";
-                    nuevaCadena = ceros + cadenaBinaria;
-                    cadenaBinaria = nuevaCadena;
-
-
-                }*/
-                
-
+                 {
+                     binaryString += cadenaBinaria.PadLeft(cadenaBinaria.Length + (16-contadorItem), '0');
+                 }
+                 else
+                 {
+                     binaryString += cadenaBinaria.PadLeft(16, '0');
+                 }
             }
             return binaryString;
         }
@@ -409,49 +402,46 @@ namespace Compresor.Huffman
 
         public ColaED1<NodoHuff<byte>> leerArchivo(string fileArchivo)
         {
-            fileArchivo = fileArchivo.Substring(0, fileArchivo.Length - 2);
+            //fileArchivo = fileArchivo.Substring(0, fileArchivo.Length);
             System.Text.ASCIIEncoding codificador = new System.Text.ASCIIEncoding();
             byte[] bytesLinea = codificador.GetBytes(fileArchivo);
 
             int noValores = bytesLinea[0];
             int noBytes = bytesLinea[1];
+            contadorItem = bytesLinea[2];
+            cantidadValoresString = (noValores * noBytes) + 3;
 
-            for (int i = 2; i <= (noValores * noBytes) + 1; i++)
+            for (int i = 3; i <= (noValores * noBytes) + noBytes; i++)
             {
                 contador = contador + bytesLinea[i + 1];
                 i++;
             }
 
-            for (int i = 2; i <= (noValores * noBytes)+1; i++)
+            for (int i = 3; i <= (noValores * noBytes)+noBytes; i++)
             {
-                NodoHuff<byte> nodoH = new NodoHuff<byte>();
-                nodoH.Value = bytesLinea[i];
-                nodoH.ProbPrio = bytesLinea[i+1];
-                nodoH.Frecuencia = Decimal.Divide(nodoH.ProbPrio, contador);
-                colaPrioridad.Insert(nodoH.Frecuencia, nodoH);
-                i++;
-            }
-
-            for(int i = (noValores * noBytes) + 2; i < bytesLinea.Length; i++)
-            {
-                cadenaBytes.Add(bytesLinea[i]);
-                cadenaB += Convert.ToChar(bytesLinea[i]);
+                if(noBytes == 1)
+                {
+                    NodoHuff<byte> nodoH = new NodoHuff<byte>();
+                    nodoH.Value = bytesLinea[i];
+                    nodoH.ProbPrio = bytesLinea[i + 1];
+                    nodoH.Frecuencia = Decimal.Divide(nodoH.ProbPrio, contador);
+                    colaPrioridad.Insert(nodoH.Frecuencia, nodoH);
+                    i++;
+                }
+                else
+                {
+                    NodoHuff<byte> nodoH = new NodoHuff<byte>();
+                    nodoH.Value = bytesLinea[i];
+                    nodoH.ProbPrio = bytesLinea[i + 1]+bytesLinea[i+2];
+                    nodoH.Frecuencia = Decimal.Divide(nodoH.ProbPrio, contador);
+                    colaPrioridad.Insert(nodoH.Frecuencia, nodoH);
+                    i++;
+                }
             }
 
             colaPrioridad.ordenar();
             return colaPrioridad;
         }
-
-
-
-
-
-
-
-
-
-
-
 
     }
 

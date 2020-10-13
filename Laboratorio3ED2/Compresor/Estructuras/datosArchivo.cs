@@ -8,5 +8,6 @@ namespace Compresor.Estructuras
     {
         public char caracter { get; set; }
         public char valorASCII { get; set; }
+        public char valorASCII2 { get; set; }
     }
 }
